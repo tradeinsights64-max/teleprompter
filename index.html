@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="am">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>Trade Insight Teleprompter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@500;700;800&family=Figtree:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: full-screen dark prompter; reading line fixed near the top third (close to the lens); control bar at the bottom */
+:root{--bg:#05060f;--fg:#f5f6ff;--dim:#5d6388;--cue:#7a83c9;--accent:#ff6f00;--ok:#22c55e;--bad:#ef4444;--panel:#11132a;--line:#262a52;
+color-scheme:dark;--font:"Noto Sans Ethiopic","Figtree",system-ui,sans-serif;--ui:"Figtree","Noto Sans Ethiopic",system-ui,sans-serif;--fs:64px;--readY:30vh}
+*{box-sizing:border-box}html,body{margin:0;height:100%;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none;background:var(--bg);color:var(--fg);font-family:var(--ui);overflow:hidden}
+#stage{position:fixed;inset:0;overflow:hidden}
+#stage.mirror #scroller{transform:scaleX(-1)}
+#scroller{position:absolute;inset:0;overflow:hidden}
+#track{position:absolute;left:0;right:0;top:0;padding:0 7vw;will-change:transform;transition:transform .45s cubic-bezier(.25,.8,.25,1)}
+.ln{font:700 var(--fs)/1.32 var(--font);color:var(--dim);margin:0;padding:.12em 0;transition:color .25s,opacity .25s}
+.ln.gap{height:calc(var(--fs)*.55)}
+.ln.cue{font:600 calc(var(--fs)*.42)/1.4 var(--ui);color:var(--cue);letter-spacing:.02em}
+.ln.head{font:800 calc(var(--fs)*.5)/1.4 var(--ui);color:var(--accent);text-transform:uppercase;letter-spacing:.08em;padding-top:.6em}
+.ln.cur{color:var(--fg)}
+.ln.done{color:#3a3f66}
+.w{transition:color .15s}.w.said{color:#8f96c7}.ln.cur .w.said{color:#9aa3d6}.w.now{color:var(--accent)}
+#marker{position:fixed;left:0;right:0;top:var(--readY);height:0;pointer-events:none;z-index:2}
+#marker::before{content:"";position:absolute;left:1.2vw;top:calc(var(--fs)*-.35);border-left:22px solid var(--accent);border-top:16px solid transparent;border-bottom:16px solid transparent}
+#marker::after{content:"";position:absolute;right:1.2vw;top:calc(var(--fs)*-.35);border-right:22px solid var(--accent);border-top:16px solid transparent;border-bottom:16px solid transparent}
+#fadeTop,#fadeBot{position:fixed;left:0;right:0;pointer-events:none;z-index:1}
+#fadeTop{top:0;height:14vh;background:linear-gradient(var(--bg),transparent)}
+#fadeBot{bottom:0;height:22vh;background:linear-gradient(transparent,var(--bg))}
+/* bar */
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px max(14px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));background:rgba(10,11,30,.92);border-top:1px solid var(--line);transition:opacity .3s}
+#bar.hide{opacity:0}#bar.hide:hover{opacity:1}
+button,select{font:600 17px var(--ui);min-height:44px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 13px;cursor:pointer}
+button:active{transform:scale(.97)}button.primary{background:var(--accent);border-color:var(--accent);color:#1a0a00}
+button.on{border-color:var(--accent);color:var(--accent)}
+#status{display:flex;align-items:center;gap:8px;font:600 14px var(--ui);color:#b9bee6;margin-left:auto;min-width:0}
+#dot{width:12px;height:12px;border-radius:50%;background:#555;flex:none}
+#dot.listen{background:var(--ok);box-shadow:0 0 0 0 rgba(34,197,94,.6);animation:pulse 1.4s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 10px rgba(34,197,94,0)}}
+#heard{max-width:34vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#7f86b8;font-family:var(--font)}
+#level{width:70px;height:8px;background:#1d2048;border-radius:4px;overflow:hidden}#level i{display:block;height:100%;width:0;background:var(--ok)}
+/* editor */
+#editor{position:fixed;inset:0;z-index:10;background:rgba(5,6,15,.97);display:flex;flex-direction:column;gap:12px;padding:22px max(16px,4vw)}
+#editor[hidden]{display:none}
+#editor h1{margin:0;font:800 26px var(--ui)}#editor h1 span{color:var(--accent)}
+#editor p{margin:0;color:#aab0dd;font-size:15px;max-width:90ch;line-height:1.5}
+#src{flex:1;-webkit-user-select:text;user-select:text;touch-action:auto;width:100%;font:500 20px/1.6 var(--font);background:#0c0e22;color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px;resize:none}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+label{font:600 14px var(--ui);color:#c3c8ee;display:flex;align-items:center;gap:6px}
+input[type=range]{accent-color:var(--accent)}
+kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+#toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1b1e42;border:1px solid var(--line);padding:10px 18px;border-radius:999px;font:600 15px var(--ui);z-index:20;opacity:0;transition:opacity .25s;pointer-events:none}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="stage"><div id="scroller"><div id="track"></div></div></div>
+<div id="fadeTop"></div><div id="fadeBot"></div><div id="marker"></div>
+<div id="toast"></div>
+
+<div id="bar">
+  <button class="primary" id="go">▶ Start</button>
+  <select id="mode" title="Scroll mode">
+    <option value="voice">🎙 Follow my voice (Amharic)</option>
+    <option value="vad">🔊 Scroll while I talk</option>
+    <option value="auto">⏱ Constant speed</option>
+  </select>
+  <button id="back" title="Back one line (↑)">↑</button>
+  <button id="fwd" title="Forward one line (↓)">↓</button>
+  <label>Size <input type="range" id="size" min="34" max="140" value="64"></label>
+  <label>Speed <input type="range" id="speed" min="10" max="140" value="45"></label>
+  <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
+  <button id="full" title="Full screen (F)">⛶</button>
+  <button id="edit" title="Edit script (E)">✎ Script</button>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span></div>
+</div>
+
+<div id="editor">
+  <h1>Trade Insight <span>Teleprompter</span></h1>
+  <p>Paste the teleprompter script from the Trello card. One line = one breath. A blank line is a pause. Lines in <b>[brackets]</b> are cues for Samuel: they show small and the voice tracking skips them. Lines starting with <b>###</b> show as section titles.</p>
+  <textarea id="src" spellcheck="false"></textarea>
+  <div class="row">
+    <button class="primary" id="load">Load script</button>
+    <label><input type="checkbox" id="cleanTrello" checked> Use only the "📜 SCRIPT" part if I paste the whole Trello card</label>
+    <span style="margin-left:auto;color:#8b92c4;font-size:14px">Keys: <kbd>Space</kbd> start/pause · <kbd>↑</kbd><kbd>↓</kbd> line · <kbd>+</kbd><kbd>−</kbd> size · <kbd>M</kbd> mirror · <kbd>F</kbd> full screen · <kbd>R</kbd> restart · <kbd>E</kbd> script</span>
+  </div>
+</div>
+
+<script>
+/* ---------- state ---------- */
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const SAMPLE=`### 1. መግቢያ
+
+የትሬድ ኢንሳይት ቤተሰቦች
+እንዴት ናችሁ?
+
+ዛሬ ስለ አንድ
+በጣም አስፈላጊ ነገር እናወራለን።
+
+[LOOK AT LENS]
+
+ከተከታታይ ድል በኋላ
+ለምን አደገኛ እንሆናለን?
+
+### 2. ታሪክ
+
+ሶስት ትሬድ በተከታታይ አሸንፈሃል።
+ልብህ ደስ ብሎታል።
+
+[B-ROLL: trader smiling at screen]
+
+ከዚያ ምን ታደርጋለህ?
+Lot size ትጨምራለህ።
+Stop Loss ትረሳለህ።
+
+ይህ ነው አደጋው።`;
+let S=store.get('ti-prompter',{script:SAMPLE,fs:64,speed:45,mode:'voice',mirror:false,line:0});
+let L=[];          // lines: {el,kind,words:[{el,norm}]}
+let W=[];          // flat spoken words: {li,wi,norm}
+let ptr=0;         // index in W of next expected word
+let curLine=0,running=false,autoAcc=0;
+
+/* ---------- text helpers ---------- */
+const PUNCT=/[።፣፤፥፦፧፨!?.,:;"'“”‘’()\-–—…\/]/g;
+function norm(s){return s.toLowerCase().replace(PUNCT,'').replace(/\s+/g,'').trim()}
+// Latin words the recogniser will usually hear in Ethiopic letters
+const TR={stop:'ስቶፕ',loss:'ሎስ',lot:'ሎት',size:'ሳይዝ',analysis:'አናሊሲስ',take:'ቴክ',profit:'ፕሮፊት',trade:'ትሬድ',trader:'ትሬደር',trading:'ትሬዲንግ',setup:'ሴታፕ',entry:'ኢንትሪ',journal:'ጆርናል',fomo:'ፎሞ',risk:'ሪስክ',reward:'ሪዋርድ',key:'ኪ',level:'ሌቭል',chart:'ቻርት',market:'ማርኬት',telegram:'ቴሌግራም',youtube:'ዩቱብ',tiktok:'ቲክቶክ',academy:'አካዳሚ',bootcamp:'ቡትካምፕ',exness:'ኤክሰነስ',insight:'ኢንሳይት',app:'አፕ',confirmation:'ኮንፈርሜሽን',checklist:'ቼክሊስት',drawdown:'ድሮውዳውን',revenge:'ሪቨንጅ',limit:'ሊሚት',order:'ኦርደር',buy:'ባይ',sell:'ሴል'};
+function variants(word){const n=norm(word);const out=[n];const t=TR[n];if(t)out.push(norm(t));return out}
+// Levenshtein similarity 0..1
+function sim(a,b){if(a===b)return 1;if(!a||!b)return 0;const m=a.length,n=b.length;let p=new Array(n+1),c=new Array(n+1);for(let j=0;j<=n;j++)p[j]=j;
+  for(let i=1;i<=m;i++){c[0]=i;for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));[p,c]=[c,p]}return 1-p[n]/Math.max(m,n)}
+function wsim(spoken,target){let best=0;for(const v of target.vars){const s=sim(spoken,v);if(s>best)best=s;if(v.length>3&&spoken.length>3&&(v.startsWith(spoken.slice(0,3))))best=Math.max(best,s+0.08)}return best}
+
+/* ---------- build ---------- */
+function parse(text){
+  if($('cleanTrello').checked){const i=text.indexOf('## 📜 SCRIPT');if(i>=0)text=text.slice(i+'## 📜 SCRIPT'.length)}
+  return text.replace(/\r/g,'').split('\n').map(s=>s.trim());
+}
+function build(){
+  const track=$('track');track.innerHTML='';L=[];W=[];
+  const lines=parse(S.script);
+  let lastGap=true;
+  lines.forEach(t=>{
+    let kind='text';
+    if(!t){if(lastGap)return;kind='gap'}else if(/^\[.*\]$/.test(t))kind='cue';else if(/^#{2,}/.test(t))kind='head';
+    lastGap=kind==='gap';
+    const el=document.createElement('p');el.className='ln '+(kind==='text'?'':kind);
+    const line={el,kind,words:[]};
+    if(kind==='text'){
+      t.split(/\s+/).forEach((w,wi)=>{const sp=document.createElement('span');sp.className='w';sp.textContent=w;el.appendChild(sp);el.appendChild(document.createTextNode(' '));
+        const vars=variants(w).filter(Boolean);if(vars.length){const o={el:sp,li:L.length,vars};line.words.push(o);W.push(o)}});
+    }else el.textContent=kind==='head'?t.replace(/^#+\s*/,''):t;
+    track.appendChild(el);L.push(line);
+  });
+  const firstText=L.findIndex(l=>l.kind==='text');
+  setLine(Math.min(Math.max(S.line||0,0),L.length-1)<0?0:(L[S.line]?S.line:Math.max(0,firstText)),true);
+}
+function lineTop(i){return L[i]?L[i].el.offsetTop:0}
+function setLine(i,instant){
+  i=Math.max(0,Math.min(L.length-1,i));curLine=i;S.line=i;save();
+  L.forEach((l,k)=>{l.el.classList.toggle('cur',k===i);l.el.classList.toggle('done',k<i&&l.kind==='text')});
+  const y=window.innerHeight*parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--readY'))/100;
+  const tr=$('track');if(instant){tr.style.transition='none';requestAnimationFrame(()=>tr.style.transition='')}
+  tr.style.transform=`translateY(${y-lineTop(i)-L[i].el.offsetHeight*0.35}px)`;
+  // move pointer to first word of this line if pointer is outside it
+  const f=W.findIndex(w=>w.li>=i);if(f>=0&&(W[ptr]?W[ptr].li!==i:true)&&!(W[ptr]&&W[ptr].li>i&&W[ptr].li<i))ptr=W[ptr]&&W[ptr].li===i?ptr:f;
+  paintWords();
+}
+function paintWords(){W.forEach((w,k)=>{w.el.classList.toggle('said',k<ptr);w.el.classList.toggle('now',k===ptr&&running&&S.mode==='voice')})}
+function nextTextLine(i,dir){let k=i+dir;while(L[k]&&L[k].kind!=='text')k+=dir;return L[k]?k:i}
+function save(){store.set('ti-prompter',S)}
+
+/* ---------- voice follow (Web Speech API) ---------- */
+let rec=null,recOn=false,lastHeard=0;
+function startRec(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('This browser has no speech recognition. Use Google Chrome, or switch to "Scroll while I talk".');setMode('vad');return false}
+  rec=new SR();rec.lang='am-ET';rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1;
+  rec.onresult=e=>{let txt='';for(let i=e.resultIndex;i<e.results.length;i++)txt+=e.results[i][0].transcript+' ';hear(txt)};
+  rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){toast('Microphone blocked. Allow the mic for this page in Chrome (lock icon in the address bar).');stop();}
+    else if(e.error==='network'){toast('Speech recognition needs internet. Switching to "Scroll while I talk".');setMode('vad');if(running)startVAD()}
+    else if(e.error==='language-not-supported'){toast('Amharic recognition is not available in this browser. Switching to "Scroll while I talk".');setMode('vad');if(running)startVAD()}};
+  rec.onend=()=>{if(running&&S.mode==='voice'){try{rec.start()}catch(e){}}};
+  try{rec.start();recOn=true}catch(e){}
+  return true;
+}
+function stopRec(){recOn=false;if(rec){rec.onend=null;try{rec.stop()}catch(e){}rec=null}}
+// match the last few spoken words against the next words of the script
+function hear(txt){
+  $('heard').textContent=txt.trim().slice(-60);lastHeard=performance.now();
+  const sp=txt.split(/\s+/).map(norm).filter(Boolean).slice(-4);if(!sp.length||!W.length)return;
+  const from=Math.max(0,ptr-3),to=Math.min(W.length,ptr+28);
+  let best=-1,bestScore=0;
+  for(let j=from;j<to;j++){
+    // align spoken tail ending at j
+    let score=0,n=0;
+    for(let k=sp.length-1,t=j;k>=0&&t>=0;k--,t--){score+=wsim(sp[k],W[t]);n++}
+    score=score/n-(j-ptr>12?0.08:0)-(j<ptr?0.05:0);
+    if(score>bestScore){bestScore=score;best=j}
+  }
+  const need=sp.length>=2?0.55:0.72;
+  if(best>=0&&bestScore>=need){const np=best+1;if(np!==ptr){ptr=Math.min(np,W.length);const li=W[Math.min(ptr,W.length-1)].li;if(li!==curLine)setLine(ptr>=W.length?W[W.length-1].li:li);else paintWords()}}
+}
+
+/* ---------- voice activity (mic level) ---------- */
+let ac=null,an=null,stream=null,vadOn=false,noise=0.01,talkUntil=0;
+async function startVAD(){
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:true,autoGainControl:true}})}catch(e){toast('Microphone blocked. Allow the mic for this page in Chrome.');return false}
+  ac=new (window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=1024;src.connect(an);vadOn=true;return true;
+}
+function stopVAD(){vadOn=false;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ac)ac.close();ac=null}
+const buf=new Float32Array(1024);
+function level(){if(!an)return 0;an.getFloatTimeDomainData(buf);let s=0;for(const v of buf)s+=v*v;return Math.sqrt(s/buf.length)}
+
+/* ---------- loop ---------- */
+let last=performance.now();
+function loop(now){
+  const dt=Math.min(.1,(now-last)/1000);last=now;
+  let lv=0;if(an){lv=level();noise=lv<noise*3?noise*.995+lv*.005:noise;$('level').firstChild.style.width=Math.min(100,lv*900)+'%'}
+  if(running){
+    const talking=lv>Math.max(0.012,noise*2.6);if(talking)talkUntil=now+450;
+    const speaking=now<talkUntil;
+    if(S.mode==='auto'||(S.mode==='vad'&&speaking)||(S.mode==='voice'&&speaking&&now-lastHeard>4500)){
+      // pixels per second from speed slider; in voice mode only a slow creep when recognition goes quiet
+      const pps=S.speed*(S.mode==='voice'?0.35:1)*(S.fs/64);
+      autoAcc+=pps*dt;const lh=L[curLine]?L[curLine].el.offsetHeight:80;
+      if(autoAcc>=lh){autoAcc=0;const n=nextTextLine(curLine,1);if(n!==curLine){const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)}}
+    }
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------- controls ---------- */
+async function start(){
+  if(running)return;running=true;$('go').textContent='❚❚ Pause';autoAcc=0;
+  if(S.mode!=='auto'){const ok=await startVAD();if(!ok){stop();return}}
+  if(S.mode==='voice')startRec();
+  status();paintWords();
+}
+function stop(){running=false;$('go').textContent='▶ Start';stopRec();stopVAD();status();paintWords()}
+function status(){$('dot').className=running&&S.mode!=='auto'?'listen':'';$('stxt').textContent=!running?'Paused':S.mode==='voice'?'Listening (Amharic)…':S.mode==='vad'?'Scrolling while you talk':'Constant speed'}
+function setMode(m){S.mode=m;$('mode').value=m;save();if(running){stop();start()}else status()}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),4200)}
+function applyLook(){document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('speed').value=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
+$('go').onclick=()=>running?stop():start();
+$('mode').onchange=e=>setMode(e.target.value);
+$('back').onclick=()=>{const n=nextTextLine(curLine,-1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
+$('fwd').onclick=()=>{const n=nextTextLine(curLine,1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
+$('size').oninput=e=>{S.fs=+e.target.value;save();applyLook()};
+$('speed').oninput=e=>{S.speed=+e.target.value;save()};
+$('mirror').onclick=()=>{S.mirror=!S.mirror;save();applyLook()};
+$('full').onclick=()=>{const d=document,el=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f){const p=f.call(el);p&&p.catch&&p.catch(()=>toast('Full screen: use Share → Add to Home Screen for a full-screen app.'))}else toast('Full screen: use Share → Add to Home Screen for a full-screen app.')}};
+$('edit').onclick=()=>{stop();$('src').value=S.script;$('editor').hidden=false;$('src').focus()};
+$('load').onclick=()=>{S.script=$('src').value||SAMPLE;S.line=0;ptr=0;save();$('editor').hidden=true;build();toast('Script loaded: '+W.length+' words. Press Space to start.')};
+let hideT;document.addEventListener('mousemove',()=>{$('bar').classList.remove('hide');clearTimeout(hideT);hideT=setTimeout(()=>running&&$('bar').classList.add('hide'),2500)});
+document.addEventListener('keydown',e=>{
+  if(!$('editor').hidden){if(e.key==='Escape')$('editor').hidden=true;return}
+  if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;
+  const k=e.key;
+  if(k===' '){e.preventDefault();running?stop():start()}
+  else if(k==='ArrowUp'||k==='PageUp'){e.preventDefault();$('back').click()}
+  else if(k==='ArrowDown'||k==='PageDown'){e.preventDefault();$('fwd').click()}
+  else if(k==='+'||k==='='){S.fs=Math.min(140,S.fs+4);save();applyLook()}
+  else if(k==='-'||k==='_'){S.fs=Math.max(34,S.fs-4);save();applyLook()}
+  else if(k==='m'||k==='M')$('mirror').click();
+  else if(k==='f'||k==='F')$('full').click();
+  else if(k==='r'||k==='R'){ptr=0;setLine(Math.max(0,L.findIndex(l=>l.kind==='text')))}
+  else if(k==='e'||k==='E'){e.preventDefault();$('edit').click()}
+  else if(k==='1')setMode('voice');else if(k==='2')setMode('vad');else if(k==='3')setMode('auto');
+});
+window.addEventListener('resize',()=>setLine(curLine,true));
+let tx=0,ty=0,tt=0;
+$('stage').addEventListener('touchstart',e=>{const t=e.touches[0];tx=t.clientX;ty=t.clientY;tt=performance.now()},{passive:true});
+$('stage').addEventListener('touchend',e=>{const t=e.changedTouches[0],dy=t.clientY-ty,dx=t.clientX-tx;
+  if(Math.abs(dy)>50&&Math.abs(dy)>Math.abs(dx)){(dy<0?$('fwd'):$('back')).click()}
+  else if(Math.abs(dx)<12&&Math.abs(dy)<12&&performance.now()-tt<400){running?stop():start();$('bar').classList.remove('hide')}},{passive:true});
+
+/* ---------- boot ---------- */
+$('mode').value=S.mode;$('src').value=S.script;
+document.fonts&&document.fonts.ready.then(()=>{build();applyLook()});
+build();applyLook();
+$('editor').hidden=true;status();
+const IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+if(IOS&&S.mode==='voice'){S.mode='vad';$('mode').value='vad';save();status()}
+if(IOS)$('mode').querySelector('option[value=voice]').textContent='🎙 Follow my voice (computer Chrome only)';
+</script>
+</body>
+</html>
