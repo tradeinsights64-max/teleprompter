@@ -72,10 +72,11 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
   <button id="fwd" title="Forward one line (↓)">↓</button>
   <label>Size <input type="range" id="size" min="34" max="140" value="64"></label>
   <label>Speed <input type="range" id="speed" min="10" max="140" value="45"></label>
+  <label>Mic <input type="range" id="sens" min="1" max="10" value="6" title="Microphone sensitivity"></label>
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v3</span></div>
 </div>
 
 <div id="editor">
@@ -207,7 +208,7 @@ function hear(txt){
 }
 
 /* ---------- voice activity (mic level) ---------- */
-let ac=null,an=null,stream=null,vadOn=false,noise=0.01,talkUntil=0;
+let ac=null,an=null,stream=null,vadOn=false,noise=0.002,talkUntil=0;
 async function startVAD(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('This browser cannot use the microphone here. Open the link in Safari.');return false}
   try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast(e&&e.name==='NotAllowedError'?'Microphone not allowed. iPad Settings → Apps → Safari (or Chrome) → Microphone → Allow, then reload.':'Microphone error: '+(e&&e.name||'unknown')+'. Reload the page and tap Start again.');return false}
@@ -221,9 +222,9 @@ function level(){if(!an)return 0;an.getFloatTimeDomainData(buf);let s=0;for(cons
 let last=performance.now();
 function loop(now){
   const dt=Math.min(.1,(now-last)/1000);last=now;
-  let lv=0;if(an){lv=level();noise=lv<noise*3?noise*.995+lv*.005:noise;$('level').firstChild.style.width=Math.min(100,lv*900)+'%'}
+  let lv=0,thr=1;if(an){lv=level();noise=lv<noise*2.5?noise*.99+lv*.01:noise*.9995+lv*.0005;thr=Math.max(0.03/((S.sens||6)*1.6),noise*2.2);const bar=$('level').firstChild;bar.style.width=Math.min(100,lv/thr*50)+'%';bar.style.background=lv>thr?'#ff6f00':'#22c55e'}
   if(running){
-    const talking=lv>Math.max(0.012,noise*2.6);if(talking)talkUntil=now+450;
+    const talking=an&&lv>thr;if(talking)talkUntil=now+600;
     const speaking=now<talkUntil;
     if(S.mode==='auto'||(S.mode==='vad'&&speaking)||(S.mode==='voice'&&speaking&&now-lastHeard>4500)){
       // pixels per second from speed slider; in voice mode only a slow creep when recognition goes quiet
@@ -247,13 +248,14 @@ function stop(){running=false;$('go').textContent='▶ Start';stopRec();stopVAD(
 function status(){$('dot').className=running&&S.mode!=='auto'?'listen':'';$('stxt').textContent=!running?'Paused':S.mode==='voice'?'Listening (Amharic)…':S.mode==='vad'?'Scrolling while you talk':'Constant speed'}
 function setMode(m){S.mode=m;$('mode').value=m;save();if(running){stop();start()}else status()}
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),4200)}
-function applyLook(){document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('speed').value=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
+function applyLook(){$('sens').value=S.sens||6;document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('speed').value=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
 $('go').onclick=()=>running?stop():start();
 $('mode').onchange=e=>setMode(e.target.value);
 $('back').onclick=()=>{const n=nextTextLine(curLine,-1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
 $('fwd').onclick=()=>{const n=nextTextLine(curLine,1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
 $('size').oninput=e=>{S.fs=+e.target.value;save();applyLook()};
 $('speed').oninput=e=>{S.speed=+e.target.value;save()};
+$('sens').oninput=e=>{S.sens=+e.target.value;save()};
 $('mirror').onclick=()=>{S.mirror=!S.mirror;save();applyLook()};
 $('full').onclick=()=>{const d=document,el=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f){const p=f.call(el);p&&p.catch&&p.catch(()=>toast('Full screen: use Share → Add to Home Screen for a full-screen app.'))}else toast('Full screen: use Share → Add to Home Screen for a full-screen app.')}};
 $('edit').onclick=()=>{stop();$('src').value=S.script;$('editor').hidden=false;$('src').focus()};
