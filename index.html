@@ -47,6 +47,18 @@ button.on{border-color:var(--accent);color:var(--accent)}
 #editor[hidden]{display:none}
 #editor h1{margin:0;font:800 26px var(--ui)}#editor h1 span{color:var(--accent)}
 #editor p{margin:0;color:#aab0dd;font-size:15px;max-width:90ch;line-height:1.5}
+#edWrap{flex:1;min-height:0;display:grid;grid-template-columns:260px 1fr;gap:14px}
+@media (max-width:760px){#edWrap{grid-template-columns:1fr;grid-template-rows:auto 1fr}}
+#lib{display:flex;flex-direction:column;gap:8px;min-height:0}
+#libList{flex:1;overflow:auto;touch-action:pan-y;display:flex;flex-direction:column;gap:6px;max-height:100%}
+@media (max-width:760px){#libList{flex-direction:row;overflow-x:auto;touch-action:pan-x;max-height:none}#libList .it{min-width:170px}}
+#libList .it{text-align:left;display:flex;flex-direction:column;gap:2px;padding:10px 12px;font:600 16px var(--font)}
+#libList .it small{font:500 12px var(--ui);color:#8b92c4}
+#libList .it.sel{border-color:var(--accent);background:#2a1a10}
+#edMain{display:flex;flex-direction:column;gap:10px;min-height:0}
+#title{-webkit-user-select:text;user-select:text;touch-action:auto;font:700 19px var(--font);background:#0c0e22;color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 14px;min-height:44px}
+button.danger{color:#ff8a8a;border-color:#5a2230}
+#dirty{font:600 13px var(--ui);color:var(--accent)}
 #src{flex:1;-webkit-user-select:text;user-select:text;touch-action:auto;width:100%;font:500 20px/1.6 var(--font);background:#0c0e22;color:var(--fg);border:1px solid var(--line);border-radius:12px;padding:16px;resize:none}
 .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 label{font:600 14px var(--ui);color:#c3c8ee;display:flex;align-items:center;gap:6px}
@@ -76,15 +88,29 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v4</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v5</span></div>
 </div>
 
 <div id="editor">
   <h1>Trade Insight <span>Teleprompter</span></h1>
   <p>Paste the teleprompter script from the Trello card. One line = one breath. A blank line is a pause. Lines in <b>[brackets]</b> are cues for Samuel: they show small and the voice tracking skips them. Lines starting with <b>###</b> show as section titles.</p>
-  <textarea id="src" spellcheck="false"></textarea>
+  <div id="edWrap">
+    <div id="lib">
+      <div class="row"><button class="primary" id="newS">＋ New script</button></div>
+      <div id="libList"></div>
+    </div>
+    <div id="edMain">
+      <div class="row"><input id="title" type="text" placeholder="Script name, e.g. Episode 5 – Overtrading" style="flex:1;min-width:200px"><span id="dirty"></span></div>
+      <textarea id="src" spellcheck="false"></textarea>
+      <div class="row">
+        <button id="saveS">💾 Save</button>
+        <button class="danger" id="delS">🗑 Delete</button>
+        <button id="closeEd">✕ Close</button>
+      </div>
+    </div>
+  </div>
   <div class="row">
-    <button class="primary" id="load">Load script</button>
+    <button class="primary" id="load">Save &amp; open in prompter ▶</button>
     <label><input type="checkbox" id="cleanTrello" checked> Use only the "📜 SCRIPT" part if I paste the whole Trello card</label>
     <span style="margin-left:auto;color:#8b92c4;font-size:14px">Keys: <kbd>Space</kbd> start/pause · <kbd>↑</kbd><kbd>↓</kbd> line · <kbd>+</kbd><kbd>−</kbd> size · <kbd>M</kbd> mirror · <kbd>F</kbd> full screen · <kbd>R</kbd> restart · <kbd>E</kbd> script</span>
   </div>
@@ -259,11 +285,46 @@ $('speed').oninput=e=>{S.speed=+e.target.value;save()};
 $('sens').oninput=e=>{S.sens=+e.target.value;save()};
 $('mirror').onclick=()=>{S.mirror=!S.mirror;save();applyLook()};
 $('full').onclick=()=>{const d=document,el=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f){const p=f.call(el);p&&p.catch&&p.catch(()=>toast('Full screen: use Share → Add to Home Screen for a full-screen app.'))}else toast('Full screen: use Share → Add to Home Screen for a full-screen app.')}};
-$('edit').onclick=()=>{stop();$('src').value=S.script;$('editor').hidden=false;$('src').focus()};
-$('load').onclick=()=>{S.script=$('src').value||SAMPLE;S.line=0;ptr=0;save();$('editor').hidden=true;build();toast('Script loaded: '+W.length+' words. Press Space to start.')};
+/* ---------- script library ---------- */
+let LIB=store.get('ti-scripts',null);
+if(!Array.isArray(LIB)||!LIB.length){LIB=[{id:'s'+Date.now(),title:(S.script===SAMPLE?'Sample script':'My script'),text:S.script,t:Date.now()}];store.set('ti-scripts',LIB)}
+if(!S.cur||!LIB.some(x=>x.id===S.cur)){S.cur=LIB[0].id;save()}
+let edId=S.cur;
+const libSave=()=>store.set('ti-scripts',LIB);
+const byId=id=>LIB.find(x=>x.id===id);
+const escH=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function isDirty(){const x=byId(edId);return !x||x.text!==$('src').value||x.title!==$('title').value.trim()}
+function markDirty(){$('dirty').textContent=isDirty()?'● not saved':''}
+function renderLib(){
+  const L2=[...LIB].sort((a,b)=>b.t-a.t);
+  $('libList').innerHTML=L2.map(x=>{const d=new Date(x.t);const w=x.text.trim()?x.text.trim().split(/\s+/).length:0;
+    return `<button class="it${x.id===edId?' sel':''}" data-id="${x.id}">${escH(x.title||'Untitled')}<small>${d.toLocaleDateString()} · ${w} words${x.id===S.cur?' · ▶ in prompter':''}</small></button>`}).join('');
+  $('libList').querySelectorAll('.it').forEach(b=>b.onclick=()=>{if(b.dataset.id===edId)return;if(isDirty()&&!confirm('This script has changes that are not saved. Leave without saving?'))return;openEd(b.dataset.id)});
+}
+function openEd(id){const x=byId(id);if(!x)return;edId=id;$('title').value=x.title;$('src').value=x.text;renderLib();markDirty()}
+function saveEd(){
+  const title=$('title').value.trim()||('Script '+new Date().toLocaleDateString());$('title').value=title;
+  let x=byId(edId);if(!x){x={id:'s'+Date.now()};LIB.push(x);edId=x.id}
+  x.title=title;x.text=$('src').value;x.t=Date.now();libSave();
+  if(x.id===S.cur){S.script=x.text;save();build()}
+  renderLib();markDirty();return x}
+$('title').oninput=markDirty;$('src').addEventListener('input',markDirty);
+$('newS').onclick=()=>{if(isDirty()&&!confirm('This script has changes that are not saved. Leave without saving?'))return;
+  edId='new';$('title').value='';$('src').value='';renderLib();$('dirty').textContent='● new, not saved';$('title').focus()};
+$('saveS').onclick=()=>{const x=saveEd();toast('Saved: '+x.title)};
+$('delS').onclick=()=>{const x=byId(edId);if(!x){openEd(S.cur);return}
+  if(!confirm('Delete "'+x.title+'"? This cannot be undone.'))return;
+  LIB=LIB.filter(y=>y.id!==x.id);
+  if(!LIB.length)LIB.push({id:'s'+Date.now(),title:'New script',text:'',t:Date.now()});
+  libSave();if(S.cur===x.id){S.cur=[...LIB].sort((a,b)=>b.t-a.t)[0].id;S.script=byId(S.cur).text||SAMPLE;S.line=0;ptr=0;save();build()}
+  openEd(S.cur);toast('Deleted: '+x.title)};
+function closeEd(){if(isDirty()&&!confirm('This script has changes that are not saved. Close without saving?'))return;$('editor').hidden=true}
+$('closeEd').onclick=closeEd;
+$('edit').onclick=()=>{stop();openEd(S.cur);$('editor').hidden=false};
+$('load').onclick=()=>{const x=saveEd();S.cur=x.id;S.script=x.text||SAMPLE;S.line=0;ptr=0;save();$('editor').hidden=true;build();toast('Opened "'+x.title+'": '+W.length+' words. Tap ▶ Start.')};
 let hideT;document.addEventListener('mousemove',()=>{$('bar').classList.remove('hide');clearTimeout(hideT);hideT=setTimeout(()=>running&&$('bar').classList.add('hide'),2500)});
 document.addEventListener('keydown',e=>{
-  if(!$('editor').hidden){if(e.key==='Escape')$('editor').hidden=true;return}
+  if(!$('editor').hidden){if(e.key==='Escape')closeEd();return}
   if(e.target.tagName==='SELECT'||e.target.tagName==='INPUT')return;
   const k=e.key;
   if(k===' '){e.preventDefault();running?stop():start()}
@@ -285,7 +346,7 @@ $('stage').addEventListener('touchend',e=>{const t=e.changedTouches[0],dy=t.clie
   else if(Math.abs(dx)<12&&Math.abs(dy)<12&&performance.now()-tt<400){running?stop():start();$('bar').classList.remove('hide')}},{passive:true});
 
 /* ---------- boot ---------- */
-$('mode').value=S.mode;$('src').value=S.script;
+$('mode').value=S.mode;
 document.fonts&&document.fonts.ready.then(()=>{build();applyLook()});
 build();applyLook();
 $('editor').hidden=true;status();
