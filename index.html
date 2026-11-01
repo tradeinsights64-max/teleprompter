@@ -181,7 +181,7 @@ function startRec(){
   if(!SR){toast('This browser has no speech recognition. Use Google Chrome, or switch to "Scroll while I talk".');setMode('vad');return false}
   rec=new SR();rec.lang='am-ET';rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1;
   rec.onresult=e=>{let txt='';for(let i=e.resultIndex;i<e.results.length;i++)txt+=e.results[i][0].transcript+' ';hear(txt)};
-  rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){toast('Microphone blocked. Allow the mic for this page in Chrome (lock icon in the address bar).');stop();}
+  rec.onerror=e=>{if(e.error==='not-allowed'||e.error==='service-not-allowed'){toast('Word-by-word voice follow is not available on this device. Using "Scroll while I talk" instead.');stopRec();S.mode='vad';$('mode').value='vad';save();status()}
     else if(e.error==='network'){toast('Speech recognition needs internet. Switching to "Scroll while I talk".');setMode('vad');if(running)startVAD()}
     else if(e.error==='language-not-supported'){toast('Amharic recognition is not available in this browser. Switching to "Scroll while I talk".');setMode('vad');if(running)startVAD()}};
   rec.onend=()=>{if(running&&S.mode==='voice'){try{rec.start()}catch(e){}}};
@@ -209,8 +209,9 @@ function hear(txt){
 /* ---------- voice activity (mic level) ---------- */
 let ac=null,an=null,stream=null,vadOn=false,noise=0.01,talkUntil=0;
 async function startVAD(){
-  try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:true,autoGainControl:true}})}catch(e){toast('Microphone blocked. Allow the mic for this page in Chrome.');return false}
-  ac=new (window.AudioContext||window.webkitAudioContext)();const src=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=1024;src.connect(an);vadOn=true;return true;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('This browser cannot use the microphone here. Open the link in Safari.');return false}
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast(e&&e.name==='NotAllowedError'?'Microphone not allowed. iPad Settings → Apps → Safari (or Chrome) → Microphone → Allow, then reload.':'Microphone error: '+(e&&e.name||'unknown')+'. Reload the page and tap Start again.');return false}
+  ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended'){try{await ac.resume()}catch(e){}}const src=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=1024;src.connect(an);vadOn=true;return true;
 }
 function stopVAD(){vadOn=false;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ac)ac.close();ac=null}
 const buf=new Float32Array(1024);
@@ -287,7 +288,7 @@ build();applyLook();
 $('editor').hidden=true;status();
 const IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
 if(IOS&&S.mode==='voice'){S.mode='vad';$('mode').value='vad';save();status()}
-if(IOS)$('mode').querySelector('option[value=voice]').textContent='🎙 Follow my voice (computer Chrome only)';
+if(IOS){const o=$('mode').querySelector('option[value=voice]');if(o)o.remove();if(S.mode==='voice'){S.mode='vad';save()}$('mode').value=S.mode;status()}
 </script>
 </body>
 </html>
