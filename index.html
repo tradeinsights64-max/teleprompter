@@ -76,7 +76,7 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v3</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v4</span></div>
 </div>
 
 <div id="editor">
@@ -212,9 +212,9 @@ let ac=null,an=null,stream=null,vadOn=false,noise=0.002,talkUntil=0;
 async function startVAD(){
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast('This browser cannot use the microphone here. Open the link in Safari.');return false}
   try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){toast(e&&e.name==='NotAllowedError'?'Microphone not allowed. iPad Settings → Apps → Safari (or Chrome) → Microphone → Allow, then reload.':'Microphone error: '+(e&&e.name||'unknown')+'. Reload the page and tap Start again.');return false}
-  ac=new (window.AudioContext||window.webkitAudioContext)();if(ac.state==='suspended'){try{await ac.resume()}catch(e){}}const src=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=1024;src.connect(an);vadOn=true;return true;
+  ac=ac||new (window.AudioContext||window.webkitAudioContext)();if(ac.state!=='running'){try{await ac.resume()}catch(e){}}const src=ac.createMediaStreamSource(stream);an=ac.createAnalyser();an.fftSize=1024;src.connect(an);vadOn=true;return true;
 }
-function stopVAD(){vadOn=false;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;if(ac)ac.close();ac=null}
+function stopVAD(){vadOn=false;if(stream)stream.getTracks().forEach(t=>t.stop());stream=null;an=null}
 const buf=new Float32Array(1024);
 function level(){if(!an)return 0;an.getFloatTimeDomainData(buf);let s=0;for(const v of buf)s+=v*v;return Math.sqrt(s/buf.length)}
 
@@ -222,7 +222,7 @@ function level(){if(!an)return 0;an.getFloatTimeDomainData(buf);let s=0;for(cons
 let last=performance.now();
 function loop(now){
   const dt=Math.min(.1,(now-last)/1000);last=now;
-  let lv=0,thr=1;if(an){lv=level();noise=lv<noise*2.5?noise*.99+lv*.01:noise*.9995+lv*.0005;thr=Math.max(0.03/((S.sens||6)*1.6),noise*2.2);const bar=$('level').firstChild;bar.style.width=Math.min(100,lv/thr*50)+'%';bar.style.background=lv>thr?'#ff6f00':'#22c55e'}
+  let lv=0,thr=1;if(an){lv=level();noise=lv<noise*2.5?noise*.99+lv*.01:noise*.9995+lv*.0005;thr=Math.max(0.03/((S.sens||6)*1.6),noise*2.2);const bar=$('level').firstChild;bar.style.width=Math.min(100,lv/thr*50)+'%';bar.style.background=lv>thr?'#ff6f00':'#22c55e';if(running&&S.mode!=='auto'){const d=$('heard');if(S.mode==='vad')d.textContent='mic '+(lv*1000).toFixed(1)+' / need '+(thr*1000).toFixed(1)+(ac?' · '+ac.state:'')}}
   if(running){
     const talking=an&&lv>thr;if(talking)talkUntil=now+600;
     const speaking=now<talkUntil;
@@ -239,7 +239,8 @@ requestAnimationFrame(loop);
 
 /* ---------- controls ---------- */
 async function start(){
-  if(running)return;running=true;$('go').textContent='❚❚ Pause';autoAcc=0;
+  if(running)return;
+  if(S.mode!=='auto'){try{ac=ac||new (window.AudioContext||window.webkitAudioContext)();ac.resume&&ac.resume()}catch(e){}}running=true;$('go').textContent='❚❚ Pause';autoAcc=0;
   if(S.mode!=='auto'){const ok=await startVAD();if(!ok){stop();return}}
   if(S.mode==='voice')startRec();
   status();paintWords();
