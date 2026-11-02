@@ -1,0 +1,19 @@
+{
+  "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
+  "open": "ep02-winning-streaks",
+  "scripts": [
+    {
+      "id": "ep02-winning-streaks",
+      "title": "☁ Episode 2 — Winning streaks make you dangerous",
+      "file": "ep02-winning-streaks.txt",
+      "v": "7a1c19cc91"
+    },
+    {
+      "id": "ep02-product-intros",
+      "title": "☁ Episode 2 week — Product video intros & outros",
+      "file": "ep02-product-intros.txt",
+      "v": "9a6db9faed"
+    }
+  ],
+  "updated": "2026-11-02T04:09:17Z"
+}

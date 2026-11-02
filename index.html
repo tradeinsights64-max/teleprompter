@@ -88,7 +88,7 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v6</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v7</span></div>
 </div>
 
 <div id="editor">
@@ -357,6 +357,34 @@ $('stage').addEventListener('touchend',e=>{const t=e.changedTouches[0],dy=t.clie
   if(Math.abs(dy)>50&&Math.abs(dy)>Math.abs(dx)){(dy<0?$('fwd'):$('back')).click()}
   else if(Math.abs(dx)<12&&Math.abs(dy)<12&&performance.now()-tt<400){running?stop():start();$('bar').classList.remove('hide')}},{passive:true});
 
+
+/* ---------- cloud scripts (kept up to date by Claude in the GitHub repo) ---------- */
+let syncing=false;
+async function cloudSync(manual){
+  if(syncing||running||!$('editor').hidden)return;syncing=true;
+  try{
+    const r=await fetch('scripts/index.json?t='+Date.now(),{cache:'no-store'});if(!r.ok)throw 0;
+    const idx=await r.json();let changed=[],curChanged=false;
+    for(const e of idx.scripts||[]){
+      const id='cloud-'+e.id;let x=byId(id);
+      if(x&&x.v===e.v)continue;
+      const tr=await fetch('scripts/'+e.file+'?v='+e.v,{cache:'no-store'});if(!tr.ok)continue;
+      const text=await tr.text();
+      if(!x){x={id};LIB.push(x)}
+      x.title=e.title;x.text=text;x.v=e.v;x.t=Date.now();changed.push(e.title);
+      if(S.cur===id)curChanged=true;
+    }
+    if(changed.length)libSave();
+    const openId=idx.open?'cloud-'+idx.open:null;
+    if(openId&&byId(openId)&&S.cloudOpen!==idx.open){S.cloudOpen=idx.open;S.cur=openId;S.script=byId(openId).text;S.line=0;ptr=0;save();build();toast('☁ Opened the latest script: '+byId(openId).title)}
+    else if(curChanged){const keep=curLine;S.script=byId(S.cur).text;save();build();setLine(Math.min(keep,L.length-1),true);toast('☁ Script updated: '+byId(S.cur).title)}
+    else if(changed.length)toast('☁ Updated: '+changed.join(', '));
+    else if(manual)toast('☁ Scripts are up to date');
+  }catch(e){if(manual)toast('Could not check for script updates (no internet?)')}
+  syncing=false;
+}
+setTimeout(cloudSync,300);setInterval(cloudSync,60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)cloudSync()});
 /* ---------- boot ---------- */
 $('mode').value=S.mode;
 document.fonts&&document.fonts.ready.then(()=>{build();applyLook()});
