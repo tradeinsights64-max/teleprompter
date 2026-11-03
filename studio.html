@@ -67,7 +67,7 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
 #toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1b1e42;border:1px solid var(--line);padding:10px 18px;border-radius:999px;font:600 15px var(--ui);z-index:20;opacity:0;transition:opacity .25s;pointer-events:none}
 #toast.show{opacity:1}
 button.sp{min-width:40px;padding:6px 10px;font-size:18px}
-#spNum{display:inline-block;min-width:2.2em;text-align:center;font:700 20px var(--ui);color:var(--accent)}
+#spNum,#szNum{display:inline-block;min-width:2.2em;text-align:center;font:700 20px var(--ui);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -84,13 +84,13 @@ button.sp{min-width:40px;padding:6px 10px;font-size:18px}
   </select>
   <button id="back" title="Back one line (↑)">↑</button>
   <button id="fwd" title="Forward one line (↓)">↓</button>
-  <label>Size <input type="range" id="size" min="34" max="140" value="64"></label>
+  <label title="Text size 34–140 (+ − keys). Same number = same size every time.">Size <button id="szDn" class="sp">−</button><input type="range" id="size" min="34" max="140" step="2" value="64"><b id="szNum">64</b><button id="szUp" class="sp">+</button></label>
   <label title="Scroll speed 1–50 (← → keys). Same number = same speed every time.">Speed <button id="spDn" class="sp">−</button><input type="range" id="speed" min="1" max="50" step="1" value="15"><b id="spNum">15</b><button id="spUp" class="sp">+</button></label>
   <label>Mic <input type="range" id="sens" min="1" max="10" value="6" title="Microphone sensitivity"></label>
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v8</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v9</span></div>
 </div>
 
 <div id="editor">
@@ -291,12 +291,15 @@ function stop(){running=false;$('go').textContent='▶ Start';stopRec();stopVAD(
 function status(){$('dot').className=running&&S.mode!=='auto'?'listen':'';$('stxt').textContent=!running?'Paused':S.mode==='voice'?'Listening (Amharic)…':S.mode==='vad'?'Scrolling while you talk':'Constant speed'}
 function setMode(m){S.mode=m;$('mode').value=m;save();if(running){stop();start()}else status()}
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),4200)}
-function applyLook(){$('sens').value=S.sens||6;document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('speed').value=S.speed;$('spNum').textContent=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
+function applyLook(){$('sens').value=S.sens||6;document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('szNum').textContent=S.fs;$('speed').value=S.speed;$('spNum').textContent=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
 $('go').onclick=()=>running?stop():start();
 $('mode').onchange=e=>setMode(e.target.value);
 $('back').onclick=()=>{const n=nextTextLine(curLine,-1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
 $('fwd').onclick=()=>{const n=nextTextLine(curLine,1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
-$('size').oninput=e=>{S.fs=+e.target.value;save();applyLook()};
+function setSize(v,show){S.fs=Math.max(34,Math.min(140,Math.round(v)));save();applyLook();if(show)toast('Size '+S.fs)}
+$('size').oninput=e=>setSize(+e.target.value);
+$('szDn').onclick=()=>setSize(S.fs-2,true);
+$('szUp').onclick=()=>setSize(S.fs+2,true);
 function setSpeed(v,show){S.speed=Math.max(1,Math.min(50,Math.round(v)));$('speed').value=S.speed;$('spNum').textContent=S.speed;save();if(show)toast('Speed '+S.speed)}
 $('speed').oninput=e=>setSpeed(+e.target.value);
 $('spDn').onclick=()=>setSpeed(S.speed-1,true);
@@ -351,8 +354,8 @@ document.addEventListener('keydown',e=>{
   else if(k==='ArrowDown'||k==='PageDown'){e.preventDefault();$('fwd').click()}
   else if(k==='ArrowLeft'){e.preventDefault();setSpeed(S.speed-1,true)}
   else if(k==='ArrowRight'){e.preventDefault();setSpeed(S.speed+1,true)}
-  else if(k==='+'||k==='='){S.fs=Math.min(140,S.fs+4);save();applyLook()}
-  else if(k==='-'||k==='_'){S.fs=Math.max(34,S.fs-4);save();applyLook()}
+  else if(k==='+'||k==='='){setSize(S.fs+2,true)}
+  else if(k==='-'||k==='_'){setSize(S.fs-2,true)}
   else if(k==='m'||k==='M')$('mirror').click();
   else if(k==='f'||k==='F')$('full').click();
   else if(k==='r'||k==='R'){ptr=0;setLine(Math.max(0,L.findIndex(l=>l.kind==='text')))}
