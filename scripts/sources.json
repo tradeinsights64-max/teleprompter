@@ -1,0 +1,21 @@
+{
+  "note": "Which Trello card feeds which teleprompter script. The hourly sync task reads this file, re-builds each script from its card and pushes when anything changed. New '📱 SHORT VIDEO SCRIPTS' cards are added here automatically.",
+  "cards": [
+    {
+      "card": "https://trello.com/c/cCZhRmFU",
+      "kind": "episode",
+      "scripts": {
+        "ep02-winning-streaks": "section after '## 📜 SCRIPT' (+ '📜 SCRIPT PART 2' comments)",
+        "ep02-product-intros": "section '## 🎥 THURSDAY PRODUCT VIDEOS' (rewritten headings)"
+      }
+    },
+    {
+      "card": "https://trello.com/c/3SUVlNZz",
+      "kind": "shorts",
+      "scripts": {
+        "short01-mt5-lot-size-order": "### 📱 SHORT 01",
+        "short02-weekly-analysis-promo": "### 📱 SHORT 02"
+      }
+    }
+  ]
+}
