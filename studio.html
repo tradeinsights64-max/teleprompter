@@ -66,6 +66,8 @@ input[type=range]{accent-color:var(--accent)}
 kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var(--line);border-radius:5px;padding:1px 6px}
 #toast{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:#1b1e42;border:1px solid var(--line);padding:10px 18px;border-radius:999px;font:600 15px var(--ui);z-index:20;opacity:0;transition:opacity .25s;pointer-events:none}
 #toast.show{opacity:1}
+button.sp{min-width:40px;padding:6px 10px;font-size:18px}
+#spNum{display:inline-block;min-width:2.2em;text-align:center;font:700 20px var(--ui);color:var(--accent)}
 </style>
 </head>
 <body>
@@ -83,12 +85,12 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
   <button id="back" title="Back one line (↑)">↑</button>
   <button id="fwd" title="Forward one line (↓)">↓</button>
   <label>Size <input type="range" id="size" min="34" max="140" value="64"></label>
-  <label>Speed <input type="range" id="speed" min="10" max="140" value="45"></label>
+  <label title="Scroll speed 1–50 (← → keys). Same number = same speed every time.">Speed <button id="spDn" class="sp">−</button><input type="range" id="speed" min="1" max="50" step="1" value="15"><b id="spNum">15</b><button id="spUp" class="sp">+</button></label>
   <label>Mic <input type="range" id="sens" min="1" max="10" value="6" title="Microphone sensitivity"></label>
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v7</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v8</span></div>
 </div>
 
 <div id="editor">
@@ -112,7 +114,7 @@ kbd{font:600 12px ui-monospace,monospace;background:#1b1e42;border:1px solid var
   <div class="row">
     <button class="primary" id="load">Save &amp; open in prompter ▶</button>
     <label><input type="checkbox" id="cleanTrello" checked> Use only the "📜 SCRIPT" part if I paste the whole Trello card</label>
-    <span style="margin-left:auto;color:#8b92c4;font-size:14px">Keys: <kbd>Space</kbd> start/pause · <kbd>↑</kbd><kbd>↓</kbd> line · <kbd>+</kbd><kbd>−</kbd> size · <kbd>M</kbd> mirror · <kbd>F</kbd> full screen · <kbd>R</kbd> restart · <kbd>E</kbd> script</span>
+    <span style="margin-left:auto;color:#8b92c4;font-size:14px">Keys: <kbd>Space</kbd> start/pause · <kbd>↑</kbd><kbd>↓</kbd> line · <kbd>←</kbd><kbd>→</kbd> speed · <kbd>+</kbd><kbd>−</kbd> size · <kbd>M</kbd> mirror · <kbd>F</kbd> full screen · <kbd>R</kbd> restart · <kbd>E</kbd> script</span>
   </div>
 </div>
 
@@ -145,7 +147,9 @@ Lot size ትጨምራለህ።
 Stop Loss ትረሳለህ።
 
 ይህ ነው አደጋው።`;
-let S=store.get('ti-prompter',{script:SAMPLE,fs:64,speed:45,mode:'voice',mirror:false,line:0});
+let S=store.get('ti-prompter',{script:SAMPLE,fs:64,speed:15,spv:2,mode:'voice',mirror:false,line:0});
+// v8: speed is a number 1–50 (3 px/s per step at size 64); convert the old 10–140 slider value once
+if(S.spv!==2){S.speed=Math.max(1,Math.min(50,Math.round((+S.speed||45)/3)));S.spv=2}
 let L=[];          // lines: {el,kind,words:[{el,norm}]}
 let W=[];          // flat spoken words: {li,wi,norm}
 let ptr=0;         // index in W of next expected word
@@ -266,7 +270,7 @@ function loop(now){
     const speaking=now<talkUntil;
     if(S.mode==='auto'||(S.mode==='vad'&&speaking)||(S.mode==='voice'&&speaking&&now-lastHeard>4500)){
       // pixels per second from speed slider; in voice mode only a slow creep when recognition goes quiet
-      const pps=S.speed*(S.mode==='voice'?0.35:1)*(S.fs/64);
+      const pps=S.speed*3*(S.mode==='voice'?0.35:1)*(S.fs/64);
       autoAcc+=pps*dt;const lh=L[curLine]?L[curLine].el.offsetHeight:80;
       if(autoAcc>=lh){autoAcc=0;const n=nextTextLine(curLine,1);if(n!==curLine){const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)}}
     }
@@ -287,13 +291,16 @@ function stop(){running=false;$('go').textContent='▶ Start';stopRec();stopVAD(
 function status(){$('dot').className=running&&S.mode!=='auto'?'listen':'';$('stxt').textContent=!running?'Paused':S.mode==='voice'?'Listening (Amharic)…':S.mode==='vad'?'Scrolling while you talk':'Constant speed'}
 function setMode(m){S.mode=m;$('mode').value=m;save();if(running){stop();start()}else status()}
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('show'),4200)}
-function applyLook(){$('sens').value=S.sens||6;document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('speed').value=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
+function applyLook(){$('sens').value=S.sens||6;document.documentElement.style.setProperty('--fs',S.fs+'px');$('size').value=S.fs;$('speed').value=S.speed;$('spNum').textContent=S.speed;$('stage').classList.toggle('mirror',!!S.mirror);$('mirror').classList.toggle('on',!!S.mirror);requestAnimationFrame(()=>setLine(curLine,true))}
 $('go').onclick=()=>running?stop():start();
 $('mode').onchange=e=>setMode(e.target.value);
 $('back').onclick=()=>{const n=nextTextLine(curLine,-1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
 $('fwd').onclick=()=>{const n=nextTextLine(curLine,1);const f=W.findIndex(w=>w.li>=n);if(f>=0)ptr=f;setLine(n)};
 $('size').oninput=e=>{S.fs=+e.target.value;save();applyLook()};
-$('speed').oninput=e=>{S.speed=+e.target.value;save()};
+function setSpeed(v,show){S.speed=Math.max(1,Math.min(50,Math.round(v)));$('speed').value=S.speed;$('spNum').textContent=S.speed;save();if(show)toast('Speed '+S.speed)}
+$('speed').oninput=e=>setSpeed(+e.target.value);
+$('spDn').onclick=()=>setSpeed(S.speed-1,true);
+$('spUp').onclick=()=>setSpeed(S.speed+1,true);
 $('sens').oninput=e=>{S.sens=+e.target.value;save()};
 $('mirror').onclick=()=>{S.mirror=!S.mirror;save();applyLook()};
 $('full').onclick=()=>{const d=document,el=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f){const p=f.call(el);p&&p.catch&&p.catch(()=>toast('Full screen: use Share → Add to Home Screen for a full-screen app.'))}else toast('Full screen: use Share → Add to Home Screen for a full-screen app.')}};
@@ -342,6 +349,8 @@ document.addEventListener('keydown',e=>{
   if(k===' '){e.preventDefault();running?stop():start()}
   else if(k==='ArrowUp'||k==='PageUp'){e.preventDefault();$('back').click()}
   else if(k==='ArrowDown'||k==='PageDown'){e.preventDefault();$('fwd').click()}
+  else if(k==='ArrowLeft'){e.preventDefault();setSpeed(S.speed-1,true)}
+  else if(k==='ArrowRight'){e.preventDefault();setSpeed(S.speed+1,true)}
   else if(k==='+'||k==='='){S.fs=Math.min(140,S.fs+4);save();applyLook()}
   else if(k==='-'||k==='_'){S.fs=Math.max(34,S.fs-4);save();applyLook()}
   else if(k==='m'||k==='M')$('mirror').click();
