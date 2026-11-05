@@ -1,6 +1,3 @@
-### 📱 SHORT 01 — MT5: Lot Size + Buy/Sell Order (ክፍል 3)
-[A-CAM: tight · vertical 9:16]
-
 ባለፉት ሁለት ቪዲዮዎቻችን፣
 የExness አካውንት አከፋፈትን፣
 Deposit እና Withdrawalን፣
@@ -10,8 +7,6 @@ KYC Verify ማድረግን፣
 
 ያላያችኋቸው ካላችሁ፣
 ገብታችሁ ማየት ትችላላችሁ!
-
-[PAUSE]
 
 ዛሬ በሦስተኛው ክፍላችን ደግሞ፣
 ቀጥታ MetaTrader 5 ላይ ገብተን፣
@@ -23,16 +18,12 @@ Lot Size ማስተካከያ
 ቪዲዮዋን አሁኑኑ
 Save አድርጉት።
 
-[SCREEN: MT5 app — Quotes]
-
 መጀመሪያ MT5 አፕሊኬሽናችንን ከፍተን፣
 ከታች 'Quotes' ውስጥ እንገባለን።
 
 እዚያ ላይ
 መነገድ የምንፈልገውን ፔር እንመርጣለን።
 ለምሳሌ XAUUSD፣ ወይም Gold።
-
-[SCREEN: Trade → lot size field]
 
 በመቀጠል 'Trade' የምትለዋን ስንነካ፣
 ከላይ Lot Size ማስተካከያ እናገኛለን።
@@ -43,8 +34,6 @@ Save አድርጉት።
 አነስተኛ Lot እናስገባለን።
 ለምሳሌ 0.01።
 
-[SCREEN: Buy / Sell buttons]
-
 ማርኬቱ ወደ ላይ ይሄዳል ብለን ካሰብን
 'Buy'፣
 ወደ ታች ይወርዳል ካልን ደግሞ
@@ -53,8 +42,6 @@ Save አድርጉት።
 በቃ!
 የመጀመሪያ ትሬዳችሁን
 በአግባቡ ያዛችሁ ማለት ነው።
-
-[PAUSE]
 
 ከትሬዲንግ ጋር በተያያዘ
 ሌላ የሚያስቸግራችሁ የቴክኒክ ጥያቄ ካለ፣
