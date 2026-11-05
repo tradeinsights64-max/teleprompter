@@ -1,6 +1,3 @@
-### 1. HOOK
-[A-CAM: tight]
-
 እስቲ አንድ ጥያቄ ልጠይቃችሁ።
 እውነቱን ብቻ ንገሩኝ።
 
@@ -10,16 +7,12 @@
 ወይም ቢያንስ
 ለአንድ ጓደኛችሁ ያልላካችሁ?
 
-[PAUSE]
-
 ያ ቀን ደስ ይላል።
 ማርኬቱ በእጃችሁ ያለ ይመስላችኋል።
 
 "ይሄ ነገር ገብቶኛል" ትላላችሁ።
 ማታ ስትተኙ እንኳን
 ቻርቱ ይታያችኋል።
-
-[GRAPHIC: "ከሁሉም የበለጠ አደገኛው ጊዜ ከድል በኋላ ነው"]
 
 ግን ዛሬ
 አንድ የማይመች እውነት ልንገራችሁ።
@@ -29,8 +22,6 @@
 
 ካሸነፋችሁ በኋላ
 ባለው ቀን ነው።
-
-### 2. INTRO
 
 የትሬድ ኢንሳይት ቤተሰቦች፣
 እንኳን ደህና መጣችሁ።
@@ -64,14 +55,8 @@
 እስከ መጨረሻው
 አብራችሁኝ ቆዩ።
 
-[MOLLA: optional — one short real story of your own here]
-
-### 3. DAWIT'S WEEK
-
 አንድ ታሪክ ልንገራችሁ።
 ዳዊት ብለን እንጥራው።
-
-[B-ROLL: Addis street, small phone shop]
 
 ዳዊት መገናኛ አካባቢ
 የሞባይል ሱቅ አለው።
@@ -98,17 +83,15 @@ Risk Management ተማረ።
 
 ከዚያ አንድ ልዩ ሳምንት መጣ።
 
-[GRAPHIC: ሰኞ ✓ ማክሰኞ ✓ ረቡዕ ✓ — one by one]
-
-ሰኞ አሸነፈ።
-ማክሰኞ አሸነፈ።
-ረቡዕም አሸነፈ።
+ሰኞ Win።
+ማክሰኞ Win።
+ረቡዕም Win።
 
 ሦስቱም ትሬዶች
 በቼክሊስቱ መሰረት ነበሩ።
 
 አካውንቱ በሦስት ቀን
-ሠላሳ ዶላር አደገ።
+ሃምሳ Percent አደገ።
 
 ረቡዕ ማታ
 ስክሪንሾቱን ግሩፕ ላይ ለጠፈ።
@@ -128,12 +111,8 @@ Risk Management ተማረ።
 ውስጡ አንድ ድምፅ አለ፦
 "ዛሬም የኔ ቀን ነው።"
 
-[PAUSE]
-
 ከዚያ ትንንሽ ለውጦች ይጀምራሉ።
 ዳዊት ራሱ አያስተውላቸውም።
-
-[GRAPHIC: Lot size ↑ · No confirmation · Wider stop loss]
 
 መጀመሪያ Lot sizeኡን ጨመረው።
 "ትርፉ የማርኬቱ ብር ነው" ብሎ።
@@ -145,15 +124,11 @@ Risk Management ተማረ።
 Stop Lossኡን አራቀው።
 "ይመለሳል" ብሎ።
 
-[PAUSE]
-
 አልተመለሰም።
 
 አንድ ትሬድ ብቻ
 የሦስት ቀኑን ትርፍ፣
 ከዚያም በላይ ወሰደው።
-
-[GRAPHIC: ሐሙስ ✗]
 
 ሐሙስ ማታ ዳዊት
 ግሩፑን አልከፈተም።
@@ -167,13 +142,11 @@ Stop Lossኡን አራቀው።
 ልብ በሉ፤
 ችግሩ Strategyው አልነበረም።
 
-ሦስቱን ቀን ያሸነፈው
+ሦስቱን ቀን Win ያደረገው
 በዚያው Strategy ነው።
 
 ችግሩ
 ድሉ ዳዊትን መቀየሩ ነው።
-
-### 4. WHY DOES THIS HAPPEN?
 
 ለምን የተማረ፣
 ቼክሊስት ያለው ትሬደር
@@ -203,11 +176,9 @@ Stop Lossኡን አራቀው።
 ወደ ቤት አይሄድም።
 መልሶ ያስይዘዋል።
 
-[GRAPHIC: "House Money Effect" — Thaler & Johnson, 1990]
-
 ሪቻርድ ታለር እና ኤሪክ ጆንሰን
 የተባሉ ተመራማሪዎች
-ይህንን በ1990 (እ.ኤ.አ.) በጥናት አሳይተዋል።
+ይህንን በአስራ ዘጠኝ ዘጠና በጥናት አሳይተዋል።
 
 "House Money Effect" ብለው ጠሩት።
 
@@ -222,11 +193,7 @@ Stop Lossኡን አራቀው።
 በሰውነታችን ሆርሞን ላይ
 ለውጥ ሊያመጣ ይችላል።
 
-### 5. THE CAMBRIDGE STUDY
-
-[GRAPHIC: Coates & Herbert (2008) · University of Cambridge · PNAS]
-
-በ2008 (እ.ኤ.አ.)
+በሁለት ሺህ ስምንት
 የካምብሪጅ ዩኒቨርሲቲ ተመራማሪዎች፣
 ጆን ኮትስ እና ጆ ኸርበርት፣
 በለንደን አንድ ትልቅ
@@ -238,13 +205,11 @@ Stop Lossኡን አራቀው።
 ስለዚህ ይህንን ስሜት
 ከውስጥ ያውቀዋል።
 
-[GRAPHIC: 17 traders · 8 business days · saliva 11:00 & 16:00]
-
 አስራ ሰባት ወንድ ትሬደሮችን
 ለስምንት ተከታታይ የስራ ቀናት ተከታተሉ።
 
 በየቀኑ ሁለት ጊዜ፣
-ረፋድ 5 ሰዓትና ከቀኑ 10 ሰዓት፣
+ረፋድ አምስት ሰዓትና ከቀኑ አስር ሰዓት፣
 የምራቅ ናሙና ወሰዱ።
 
 ሁለት ሆርሞኖችን ለኩ፦
@@ -255,8 +220,6 @@ Stop Lossኡን አራቀው።
 
 ምን አገኙ መሰላችሁ?
 
-[GRAPHIC: finding 1]
-
 ጠዋት ቴስቶስትሮናቸው ከፍ ያለ ቀን፣
 በዚያው ቀን
 የበለጠ ትርፍ የማግኘት ዝንባሌ ነበራቸው።
@@ -264,8 +227,6 @@ Stop Lossኡን አራቀው።
 ቴስቶስትሮን
 ከበራስ መተማመንና
 አደጋ ከመውሰድ ጋር የሚያያዝ ሆርሞን ነው።
-
-[GRAPHIC: finding 2]
 
 የጭንቀት ሆርሞን የሆነው ኮርቲሶል ደግሞ፣
 ማርኬቱ ሲናወጥ ከፍ አለ።
@@ -286,24 +247,16 @@ Stop Lossኡን አራቀው።
 
 ዳዊትን አስታወሳችሁ?
 
-[ZOOM]
-
 ግን እዚህ ላይ ታማኝ ልሁን።
 
 ጥናቱ ይህንን አላረጋገጠም፤
 ያቀረቡት መላምት ነው።
-
-[GRAPHIC: "መላምት — ያልተረጋገጠ"]
 
 የታየው ግን ይህ ነው፦
 ድልና ሆርሞን አብረው ይሄዳሉ።
 
 ሰውነታችሁም ከድል በኋላ
 እንደበፊቱ አይደለም።
-
-### 6. ON THE CHART
-
-[CHART: XAUUSD 15M — three real planned wins from Molla's journal labelled "Checklist", then one unplanned entry labelled "Emotion". No real 4th trade? Show the three and say the 4th in words.]
 
 አሁን ወደ ቻርቱ እንሂድ።
 
@@ -345,15 +298,10 @@ Lot sizeኡም
 አራተኛው
 የድሉ ሥራ ነው።
 
-[PAUSE]
-
 ማርኬቱ አልተቀየረም።
 ወርቅ ያው ወርቅ ነው።
 
 የተቀየረው ትሬደሩ ነው።
-
-### 7. FOUR RULES AFTER A WIN
-[A-CAM: medium — rules appear one at a time]
 
 ታዲያ ምን እናድርግ?
 
@@ -363,8 +311,6 @@ Lot sizeኡም
 ግን ከድል በኋላ
 ራሳችንን የምንጠብቅበት
 አራት ቀላል ሕጎች አሉ።
-
-[GRAPHIC: 1]
 
 አንደኛ፦
 ካሸነፋችሁ በኋላ
@@ -377,16 +323,12 @@ Lot size የሚወሰነው
 በስሜታችሁ አይደለም።
 በትላንትናው ውጤታችሁም አይደለም።
 
-[GRAPHIC: position size calculator]
-
 ሁልጊዜ
 Position Size Calculator ተጠቀሙ።
 
 ካልኩሌተሩ
 ስለ ድላችሁ አያውቅም።
 ለዚህ ነው የሚጠቅማችሁ።
-
-[GRAPHIC: 2]
 
 ሁለተኛ፦
 የሦስት ድል ሕግ።
@@ -396,15 +338,11 @@ Position Size Calculator ተጠቀሙ።
 ፕላትፎርሙን ዘግታችሁ
 ለማረፍ አስቡበት።
 
-[B-ROLL: coffee ceremony — jebena pouring, family at the table]
-
 ውጡ።
 ቡና ጠጡ።
 ከቤተሰባችሁ ጋር ሁኑ።
 
 ማርኬቱ ነገም አለ።
-
-[GRAPHIC: 3]
 
 ሦስተኛ፦
 ከድል በኋላ ቼክሊስቱን
@@ -416,8 +354,6 @@ Position Size Calculator ተጠቀሙ።
 
 ጮክ ብሎ መናገር
 አእምሯችሁን ቆም ያደርገዋል።
-
-[GRAPHIC: 4]
 
 አራተኛ፦
 በራስ መተማመናችሁን
@@ -433,8 +369,6 @@ Position Size Calculator ተጠቀሙ።
 ዳዊት ሐሙስ ጠዋት ቢጽፍ ኖሮ፣
 ምናልባት አስር ይጽፍ ነበር።
 
-[MOLLA: optional — how you protect yourself after a winning day]
-
 ዳዊት እነዚህን ሕጎች ቢከተል ኖሮ፣
 Lot sizeኡ ያው ይሆን ነበር።
 
@@ -444,11 +378,7 @@ Lot sizeኡ ያው ይሆን ነበር።
 የሦስቱ ቀናት ትርፍም
 ከእሱ ጋር ይቀር ነበር።
 
-### 8. THE STUDY'S LIMITS
-
 እንደተለመደው ታማኝ እንሁን።
-
-[GRAPHIC: "17 traders · 8 days · men only"]
 
 ጥናቱ የተደረገው
 በጥቂት ወንድ ትሬደሮች ላይ ብቻ ነው።
@@ -486,9 +416,6 @@ Lot sizeኡ ያው ይሆን ነበር።
 ልታጡት የማትችሉትን ብር
 በፍፁም ሪስክ አታድርጉ።
 
-### 9. THIS WEEK'S TASK
-[A-CAM: tight]
-
 በዚህ ሳምንት
 አንድ ነገር ብቻ አድርጉ።
 
@@ -498,16 +425,12 @@ Lot sizeኡ ያው ይሆን ነበር።
 
 ሁለት ቁጥር ብቻ።
 
-[GRAPHIC: "Stress + confidence, 1–10, before every trade"]
-
 በሳምንቱ መጨረሻ ተመልከቱ፦
 የተሸነፋችሁባቸው ትሬዶች
 በየትኛው ቁጥር ላይ ነበሩ?
 
 ኮሜንት ላይ አጋሩን።
 እኔም አነባቸዋለሁ።
-
-### 10. SUMMARY
 
 እንግዲህ ዛሬ ያየነውን
 በአጭሩ እንድገመው።
@@ -532,15 +455,10 @@ Lot size አትጨምሩ።
 ቼክሊስቱን ጮክ ብላችሁ አንብቡ።
 በራስ መተማመናችሁን ጻፉ።
 
-[PAUSE]
-
 ድል ስሜታችሁን ይቀይራል።
 
 ሕጋችሁ ግን
 መቀየር የለበትም።
-
-### 10b. 🎁 SECRET WORD
-[A-CAM: tight · LOOK AT LENS]
 
 እስከ መጨረሻው
 አብራችሁኝ ስለቆያችሁ
@@ -548,8 +466,6 @@ Lot size አትጨምሩ።
 
 ለእናንተ ብቻ
 አንድ ሚስጥራዊ ቃል አለኝ።
-
-[GRAPHIC: secret word — HUMBLE]
 
 የዚህ ሳምንት ቃል፦
 HUMBLE።
@@ -565,8 +481,6 @@ HUMBLE።
 እሁድ በቀጥታ ስርጭት
 የሳምንቱን ሽልማት
 በዕጣ እናወጣለን።
-
-### 11. NEXT STEP
 
 ይህ ቪዲዮ ከጠቀማችሁ፣
 ቻናሉን ሰብስክራይብ አድርጉ።
@@ -597,18 +511,14 @@ tradeinsightnlm.com ዌብሳይታችንን ጎብኙ።
 ከቪዲዮው በታች
 Description ላይ አሉ።
 
-### 12. CLOSING
-
 በሚቀጥለው ሳምንት
-እግዚአብሔር ቢፈቅድ፣
+ፈጣሪ ቢፈቅድ፣
 ሌላ ጠቃሚ ርዕስ ይዤ እመጣለሁ።
 
 እስከዚያው
 ድላችሁን አክብሩ።
 
 ግን ሕጋችሁን አትርሱ።
-
-[PAUSE]
 
 Trade Insight.
 Execute the Plan.
