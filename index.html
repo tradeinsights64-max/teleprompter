@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+Ethiopic:wght@500;700;800&family=Figtree:wght@500;600;700;800&display=swap">
 <style>
-/* Layout: full-screen dark prompter; reading line fixed near the top third (close to the lens); control bar at the bottom */
+/* Layout: full-screen dark prompter; reading line position chosen with the ⇕ button (top / middle / low); control bar at the bottom */
 :root{--bg:#05060f;--fg:#f5f6ff;--dim:#5d6388;--cue:#7a83c9;--accent:#ff6f00;--ok:#22c55e;--bad:#ef4444;--panel:#11132a;--line:#262a52;
 color-scheme:dark;--font:"Noto Sans Ethiopic","Figtree",system-ui,sans-serif;--ui:"Figtree","Noto Sans Ethiopic",system-ui,sans-serif;--fs:64px;--readY:30vh}
 *{box-sizing:border-box}html,body{margin:0;height:100%;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none;background:var(--bg);color:var(--fg);font-family:var(--ui);overflow:hidden}
@@ -88,10 +88,11 @@ button.sp{min-width:40px;padding:6px 10px;font-size:18px}
   <label title="Text size 34–140 (+ − keys). Same number = same size every time.">Size <button id="szDn" class="sp">−</button><input type="range" id="size" min="34" max="140" step="2" value="64"><input type="number" id="szNum" min="34" max="140" inputmode="numeric" pattern="[0-9]*" value="64" title="Tap and type a size (34–140)"><button id="szUp" class="sp">+</button></label>
   <label title="Scroll speed 1–50 (← → keys). Same number = same speed every time.">Speed <button id="spDn" class="sp">−</button><input type="range" id="speed" min="1" max="50" step="1" value="15"><input type="number" id="spNum" min="1" max="50" inputmode="numeric" pattern="[0-9]*" value="15" title="Tap and type a speed (1–50)"><button id="spUp" class="sp">+</button></label>
   <label>Mic <input type="range" id="sens" min="1" max="10" value="6" title="Microphone sensitivity"></label>
+  <button id="pos" title="Reading line position: top / middle / low (P)">⇕ Middle</button>
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v11</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v12</span></div>
 </div>
 
 <div id="editor">
@@ -310,6 +311,10 @@ $('spDn').onclick=()=>setSpeed(S.speed-1,true);
 $('spUp').onclick=()=>setSpeed(S.speed+1,true);
 $('sens').oninput=e=>{S.sens=+e.target.value;save()};
 $('mirror').onclick=()=>{S.mirror=!S.mirror;save();applyLook()};
+const POS=[{n:'Top',y:30},{n:'Middle',y:50},{n:'Low',y:62}];
+function applyPos(){const p=POS.find(o=>o.n===S.pos)||POS[1];document.documentElement.style.setProperty('--readY',p.y+'vh');$('pos').textContent='⇕ '+p.n;if(typeof curLine!=='undefined'&&L&&L.length)setLine(curLine)}
+$('pos').onclick=()=>{const i=POS.findIndex(o=>o.n===S.pos);S.pos=POS[((i<0?1:i)+1)%POS.length].n;save();applyPos();toast&&toast('Reading line: '+S.pos)};
+applyPos();
 $('full').onclick=()=>{const d=document,el=d.documentElement;if(d.fullscreenElement||d.webkitFullscreenElement){(d.exitFullscreen||d.webkitExitFullscreen).call(d)}else{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(f){const p=f.call(el);p&&p.catch&&p.catch(()=>toast('Full screen: use Share → Add to Home Screen for a full-screen app.'))}else toast('Full screen: use Share → Add to Home Screen for a full-screen app.')}};
 /* ---------- script library ---------- */
 let LIB=store.get('ti-scripts',null);
@@ -361,6 +366,7 @@ document.addEventListener('keydown',e=>{
   else if(k==='+'||k==='='){setSize(S.fs+2,true)}
   else if(k==='-'||k==='_'){setSize(S.fs-2,true)}
   else if(k==='m'||k==='M')$('mirror').click();
+  else if(k==='p'||k==='P')$('pos').click();
   else if(k==='f'||k==='F')$('full').click();
   else if(k==='r'||k==='R'){ptr=0;setLine(Math.max(0,L.findIndex(l=>l.kind==='text')))}
   else if(k==='e'||k==='E'){e.preventDefault();$('edit').click()}
