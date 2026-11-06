@@ -4,9 +4,9 @@
   "scripts": [
     {
       "id": "ep02-winning-streaks",
-      "title": "☁ Episode 2 — Winning streaks make you dangerous",
+      "title": "☁ Episode 2 — Winning streaks make you dangerous (Samuel's edit)",
       "file": "ep02-winning-streaks.txt",
-      "v": "5cb15bc93d"
+      "v": "fe5fd2115a"
     },
     {
       "id": "ep02-product-intros",
@@ -27,5 +27,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-05T10:36:30Z"
+  "updated": "2026-11-06T09:01:43Z"
 }
