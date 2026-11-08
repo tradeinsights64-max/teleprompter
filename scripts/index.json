@@ -1,7 +1,13 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "ep02-winning-streaks",
+  "open": "gold-weekly-outlook",
   "scripts": [
+    {
+      "id": "gold-weekly-outlook",
+      "title": "📱 Gold Weekly Outlook — week of Nov 9 (1 min)",
+      "file": "gold-weekly-outlook.txt",
+      "v": "a8d70b54ca"
+    },
     {
       "id": "ep02-winning-streaks",
       "title": "☁ Episode 2 — Winning streaks make you dangerous (Samuel's edit)",
@@ -27,5 +33,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-06T09:01:43Z"
+  "updated": "2026-11-08T15:23:21Z"
 }
