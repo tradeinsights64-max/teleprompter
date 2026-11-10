@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Trade Insight · Captions</title>
+<style>
+:root{--navy:#000080;--orange:#FF6F00;--bg:#F5F5F5;--ink:#1d1d2b;--card:#fff;--line:#e2e4ee}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1220;--ink:#eceef6;--card:#181c30;--line:#2a3050}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI","Noto Sans Ethiopic","Nyala",sans-serif}
+header{background:var(--navy);color:#fff;padding:16px max(16px,env(safe-area-inset-left));position:sticky;top:0;z-index:2}
+header b{display:block;font-size:13px;letter-spacing:.08em;color:var(--orange)}header h1{margin:2px 0 0;font-size:19px;line-height:1.25}
+main{max-width:640px;margin:0 auto;padding:14px 16px 40px;display:grid;gap:12px}
+.c{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.h{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.h span{font-weight:700;font-size:15px}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font:inherit}
+button{border:0;border-radius:10px;background:var(--orange);color:#fff;font:700 15px system-ui,sans-serif;padding:10px 18px;min-width:96px;cursor:pointer}
+button.ok{background:#14804a}
+.e{padding:30px 16px;text-align:center}
+</style></head><body>
+<header><b>TRADE INSIGHT · CAPTIONS</b><h1 id="t">Tap Copy, then paste</h1></header>
+<main id="m"></main>
+<script>
+function dec(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s);const u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return JSON.parse(new TextDecoder().decode(u))}
+async function copy(txt,btn){try{await navigator.clipboard.writeText(txt)}catch(e){const a=document.createElement('textarea');a.value=txt;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove()}btn.textContent='Copied ✓';btn.classList.add('ok');setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok')},1800)}
+const m=document.getElementById('m');
+try{const h=location.hash.match(/d=([^&]+)/);if(!h)throw 0;const d=dec(h[1]);
+if(d.t)document.getElementById('t').textContent=d.t;
+(d.i||[]).forEach(([lab,txt])=>{const c=document.createElement('div');c.className='c';const hd=document.createElement('div');hd.className='h';const s=document.createElement('span');s.textContent=lab;const b=document.createElement('button');b.textContent='Copy';b.onclick=()=>copy(txt,b);hd.append(s,b);const p=document.createElement('pre');p.textContent=txt;c.append(hd,p);m.append(c)});
+}catch(e){m.innerHTML='<div class="c e">No captions in this link.</div>'}
+</script></body></html>
