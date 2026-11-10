@@ -1,7 +1,19 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "gold-weekly-outlook",
+  "open": "ep03-script",
   "scripts": [
+    {
+      "id": "ep03-script",
+      "title": "☁ Episode 3 — Why most traders lose: the psychology of the first 90 days",
+      "file": "ep03-script.txt",
+      "v": "07f4573089"
+    },
+    {
+      "id": "ep03-product-intros",
+      "title": "☁ Episode 3 week — Product video intros & outros",
+      "file": "ep03-product-intros.txt",
+      "v": "f83e6b82c2"
+    },
     {
       "id": "gold-weekly-outlook",
       "title": "📱 Gold Weekly Outlook — week of Nov 9 (1 min)",
@@ -33,5 +45,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-08T15:25:46Z"
+  "updated": "2026-11-09T20:26:00Z"
 }
