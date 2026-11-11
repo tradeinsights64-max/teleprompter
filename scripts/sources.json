@@ -14,7 +14,8 @@
       "kind": "shorts",
       "scripts": {
         "short01-mt5-lot-size-order": "### 📱 SHORT 01",
-        "short02-weekly-analysis-promo": "### 📱 SHORT 02"
+        "short02-weekly-analysis-promo": "### 📱 SHORT 02",
+        "short03-morning-analysis-tp": "### 📱 SHORT 03"
       }
     }
   ]
