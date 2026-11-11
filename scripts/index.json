@@ -1,7 +1,13 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "ep03-script",
+  "open": "short03-morning-analysis-tp",
   "scripts": [
+    {
+      "id": "short03-morning-analysis-tp",
+      "title": "📱 Short 03 — Morning Analysis: TP ነካ (Nov 11)",
+      "file": "short03-morning-analysis-tp.txt",
+      "v": "68a0ef77e7"
+    },
     {
       "id": "gold-weekly-outlook",
       "title": "📱 Gold Weekly Outlook — week of Nov 9 (1 min)",
@@ -45,5 +51,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-11T04:49:28Z"
+  "updated": "2026-11-11T13:22:30Z"
 }
