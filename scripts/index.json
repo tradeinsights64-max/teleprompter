@@ -3,22 +3,22 @@
   "open": "ep03-script",
   "scripts": [
     {
+      "id": "gold-weekly-outlook",
+      "title": "📱 Gold Weekly Outlook — week of Nov 9 (1 min)",
+      "file": "gold-weekly-outlook.txt",
+      "v": "8e01cdd03a"
+    },
+    {
       "id": "ep03-script",
       "title": "☁ Episode 3 — Why most traders lose: the psychology of the first 90 days",
       "file": "ep03-script.txt",
-      "v": "6dfe44f1c1"
+      "v": "a349302f83"
     },
     {
       "id": "ep03-product-intros",
       "title": "☁ Episode 3 week — Product video intros & outros",
       "file": "ep03-product-intros.txt",
       "v": "f83e6b82c2"
-    },
-    {
-      "id": "gold-weekly-outlook",
-      "title": "📱 Gold Weekly Outlook — week of Nov 9 (1 min)",
-      "file": "gold-weekly-outlook.txt",
-      "v": "8e01cdd03a"
     },
     {
       "id": "ep02-winning-streaks",
@@ -45,5 +45,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-10T04:51:13Z"
+  "updated": "2026-11-11T04:49:28Z"
 }
