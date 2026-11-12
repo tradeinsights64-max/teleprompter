@@ -1,7 +1,13 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "short03-morning-analysis-tp",
+  "open": "short04-diaspora-free-course",
   "scripts": [
+    {
+      "id": "short04-diaspora-free-course",
+      "title": "📱 Short 04 — ውጭ ለምትኖሩ: ነጻ Full Course + 1 ወር Mentorship (Nov 12)",
+      "file": "short04-diaspora-free-course.txt",
+      "v": "4e3f4a4107"
+    },
     {
       "id": "short03-morning-analysis-tp",
       "title": "📱 Short 03 — Morning Analysis: TP ነካ (Nov 11)",
@@ -51,5 +57,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-11T13:24:10Z"
+  "updated": "2026-11-12T08:58:00Z"
 }
