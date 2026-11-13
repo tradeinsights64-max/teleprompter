@@ -1,24 +1,24 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "short04-diaspora-free-course",
+  "open": "gold-weekly-outlook",
   "scripts": [
+    {
+      "id": "gold-weekly-outlook",
+      "title": "📱 Gold Weekly Outlook — week of Nov 16 (1 min)",
+      "file": "gold-weekly-outlook.txt",
+      "v": "fdff94693d"
+    },
     {
       "id": "short04-diaspora-free-course",
       "title": "📱 Short 04 — ውጭ ለምትኖሩ: ነጻ Full Course + 1 ወር Mentorship (Nov 12)",
       "file": "short04-diaspora-free-course.txt",
-      "v": "7df245f7c0"
+      "v": "9dd0962e7e"
     },
     {
       "id": "short03-morning-analysis-tp",
       "title": "📱 Short 03 — Morning Analysis: TP ነካ (Nov 11)",
       "file": "short03-morning-analysis-tp.txt",
-      "v": "d0eff3561a"
-    },
-    {
-      "id": "gold-weekly-outlook",
-      "title": "📱 Gold Weekly Outlook — week of Nov 9 (1 min)",
-      "file": "gold-weekly-outlook.txt",
-      "v": "8e01cdd03a"
+      "v": "ff2b7b6ce9"
     },
     {
       "id": "ep03-script",
@@ -57,5 +57,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-12T09:01:00Z"
+  "updated": "2026-11-13T22:40:39Z"
 }
