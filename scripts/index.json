@@ -4,9 +4,9 @@
   "scripts": [
     {
       "id": "short05-gold-outlook-40s",
-      "title": "📱 Short 05 — Gold Weekly Outlook, week of Nov 16 (45 s · v2)",
+      "title": "📱 Short 05 — Gold Weekly Outlook, week of Nov 16 (45 s · v3)",
       "file": "short05-gold-outlook-40s.txt",
-      "v": "ca301a7cc1"
+      "v": "7b866a421a"
     },
     {
       "id": "gold-weekly-outlook",
@@ -63,5 +63,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-15T13:39:30Z"
+  "updated": "2026-11-15T13:46:50Z"
 }
