@@ -1,7 +1,13 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "gold-weekly-outlook",
+  "open": "short05-gold-outlook-40s",
   "scripts": [
+    {
+      "id": "short05-gold-outlook-40s",
+      "title": "📱 Short 05 — Gold Weekly Outlook, week of Nov 16 (40 s)",
+      "file": "short05-gold-outlook-40s.txt",
+      "v": "9fd5dc7660"
+    },
     {
       "id": "gold-weekly-outlook",
       "title": "📱 Gold Weekly Outlook — week of Nov 16 (1 min)",
@@ -57,5 +63,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-13T22:40:39Z"
+  "updated": "2026-11-15T13:30:20Z"
 }
