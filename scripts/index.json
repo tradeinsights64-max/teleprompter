@@ -1,12 +1,30 @@
 {
   "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
-  "open": "short05-gold-outlook-40s",
+  "open": "ep04-fomo",
   "scripts": [
+    {
+      "id": "ep04-fomo",
+      "title": "☁ Episode 4 — FOMO: why you always enter late",
+      "file": "ep04-fomo.txt",
+      "v": "79a66ab4ef"
+    },
+    {
+      "id": "ep04-product-intros",
+      "title": "☁ Episode 4 week — Product & short video intros (P1 P2 L1 C1)",
+      "file": "ep04-product-intros.txt",
+      "v": "479afb67e8"
+    },
+    {
+      "id": "ep05-1-percent-rule",
+      "title": "☁ Episode 5 — The 1% rule: surviving a losing streak",
+      "file": "ep05-1-percent-rule.txt",
+      "v": "1990f5d5c5"
+    },
     {
       "id": "short05-gold-outlook-40s",
       "title": "📱 Short 05 — Gold Weekly Outlook, week of Nov 16 (45 s · v3)",
       "file": "short05-gold-outlook-40s.txt",
-      "v": "7b866a421a"
+      "v": "8077e40669"
     },
     {
       "id": "gold-weekly-outlook",
@@ -63,5 +81,5 @@
       "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-15T13:46:50Z"
+  "updated": "2026-11-16T05:49:09Z"
 }
