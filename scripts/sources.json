@@ -4,11 +4,7 @@
     {
       "card": "https://trello.com/c/cCZhRmFU",
       "kind": "episode",
-      "scripts": {
-        "ep04-fomo": "Episode 4 section after '## 📜 SCRIPT' (+ '📜 SCRIPT PART 2' comments)",
-        "ep05-1-percent-rule": "Episode 5 section (lines 'E5 …')",
-        "ep04-product-intros": "section '## 🎥 THURSDAY SHORT VIDEOS' (P1 P2 L1 C1)"
-      }
+      "scripts": {}
     }
   ]
 }
