@@ -92,7 +92,7 @@ button.sp{min-width:40px;padding:6px 10px;font-size:18px}
   <button id="mirror" title="Mirror for beam-splitter glass (M)">Mirror</button>
   <button id="full" title="Full screen (F)">⛶</button>
   <button id="edit" title="Edit script (E)">✎ Script</button>
-  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v12</span></div>
+  <div id="status"><span id="dot"></span><span id="stxt">Ready</span><span id="level"><i></i></span><span id="heard"></span><span style="opacity:.5;font-size:12px">v13</span></div>
 </div>
 
 <div id="editor">
@@ -396,6 +396,13 @@ async function cloudSync(manual){
       x.title=e.title;x.text=text;x.v=e.v;x.t=Date.now();changed.push(e.title);
       if(S.cur===id)curChanged=true;
     }
+    // v13: remove old cloud scripts that are no longer in index.json (past weeks are cleaned every Friday)
+    const keep=new Set((idx.scripts||[]).map(e=>'cloud-'+e.id));
+    const removed=LIB.filter(x=>String(x.id).startsWith('cloud-')&&!keep.has(x.id));
+    if(removed.length){LIB=LIB.filter(x=>!removed.includes(x));
+      if(!LIB.length)LIB.push({id:'s'+Date.now(),title:'New script',text:'',t:Date.now()});
+      if(!byId(S.cur)){const o=idx.open&&byId('cloud-'+idx.open)?'cloud-'+idx.open:[...LIB].sort((a,b)=>b.t-a.t)[0].id;S.cur=o;S.script=byId(o).text||SAMPLE;S.line=0;ptr=0;save();build()}
+      changed.push(removed.length+' old script(s) removed')}
     if(changed.length)libSave();
     const openId=idx.open?'cloud-'+idx.open:null;
     if(openId&&byId(openId)&&S.cloudOpen!==idx.open){S.cloudOpen=idx.open;S.cur=openId;S.script=byId(openId).text;S.line=0;ptr=0;save();build();toast('☁ Opened the latest script: '+byId(openId).title)}

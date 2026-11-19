@@ -1,5 +1,5 @@
 {
-  "note": "Scripts kept up to date by Claude from the Trello card '🎬 THIS WEEK'S SCRIPT'. The teleprompter downloads any changed script automatically.",
+  "note": "Only THIS week's scripts are listed. Every Friday the past week's scripts are removed from this list (files move to scripts/archive/, backup also on Trello). The teleprompter deletes scripts that leave this list.",
   "open": "ep04-fomo",
   "scripts": [
     {
@@ -19,67 +19,7 @@
       "title": "☁ Episode 5 — The 1% rule: surviving a losing streak",
       "file": "ep05-1-percent-rule.txt",
       "v": "1990f5d5c5"
-    },
-    {
-      "id": "short05-gold-outlook-40s",
-      "title": "📱 Short 05 — Gold Weekly Outlook, week of Nov 16 (45 s · v3)",
-      "file": "short05-gold-outlook-40s.txt",
-      "v": "8077e40669"
-    },
-    {
-      "id": "gold-weekly-outlook",
-      "title": "📱 Gold Weekly Outlook — week of Nov 16 (1 min)",
-      "file": "gold-weekly-outlook.txt",
-      "v": "fdff94693d"
-    },
-    {
-      "id": "short04-diaspora-free-course",
-      "title": "📱 Short 04 — ውጭ ለምትኖሩ: ነጻ Full Course + 1 ወር Mentorship (Nov 12)",
-      "file": "short04-diaspora-free-course.txt",
-      "v": "9dd0962e7e"
-    },
-    {
-      "id": "short03-morning-analysis-tp",
-      "title": "📱 Short 03 — Morning Analysis: TP ነካ (Nov 11)",
-      "file": "short03-morning-analysis-tp.txt",
-      "v": "ff2b7b6ce9"
-    },
-    {
-      "id": "ep03-script",
-      "title": "☁ Episode 3 — Why most traders lose: the psychology of the first 90 days",
-      "file": "ep03-script.txt",
-      "v": "a349302f83"
-    },
-    {
-      "id": "ep03-product-intros",
-      "title": "☁ Episode 3 week — Product video intros & outros",
-      "file": "ep03-product-intros.txt",
-      "v": "f83e6b82c2"
-    },
-    {
-      "id": "ep02-winning-streaks",
-      "title": "☁ Episode 2 — Winning streaks make you dangerous (Samuel's edit)",
-      "file": "ep02-winning-streaks.txt",
-      "v": "fe5fd2115a"
-    },
-    {
-      "id": "ep02-product-intros",
-      "title": "☁ Episode 2 week — Product video intros & outros",
-      "file": "ep02-product-intros.txt",
-      "v": "a2ee47b548"
-    },
-    {
-      "id": "short01-mt5-lot-size-order",
-      "title": "📱 Short 01 — MT5: Lot Size + Buy/Sell Order",
-      "file": "short01-mt5-lot-size-order.txt",
-      "v": "f0d8d075de"
-    },
-    {
-      "id": "short02-weekly-analysis-promo",
-      "title": "📱 Short 02 — Weekly Analysis promo (Sunday 3:00 live)",
-      "file": "short02-weekly-analysis-promo.txt",
-      "v": "ebabf2d64c"
     }
   ],
-  "updated": "2026-11-16T05:49:09Z"
+  "updated": "2026-11-19T11:52:32Z"
 }
