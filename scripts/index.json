@@ -1,25 +1,10 @@
 {
-  "note": "Only THIS week's scripts are listed. Every Friday the past week's scripts are removed from this list (files move to scripts/archive/, backup also on Trello). The teleprompter deletes scripts that leave this list.",
+  "note": "Only THIS week's scripts are listed. Every Friday ... The teleprompter deletes scripts that leave this list.",
   "open": "ep04-fomo",
   "scripts": [
-    {
-      "id": "ep04-fomo",
-      "title": "☁ Episode 4 — FOMO: why you always enter late",
-      "file": "ep04-fomo.txt",
-      "v": "affe405f68"
-    },
-    {
-      "id": "ep04-product-intros",
-      "title": "☁ Episode 4 week — Product & short video intros (P1 P2 L1 C1)",
-      "file": "ep04-product-intros.txt",
-      "v": "1bb9037de4"
-    },
-    {
-      "id": "ep05-1-percent-rule",
-      "title": "☁ Episode 5 — The 1% rule: surviving a losing streak",
-      "file": "ep05-1-percent-rule.txt",
-      "v": "0930a82ebd"
-    }
+    {"id": "ep04-fomo", "title": "☁ Episode 4 — FOMO: why you always enter late", "file": "ep04-fomo.txt", "v": "affe405f68"},
+    {"id": "ep04-product-intros", "title": "☁ Episode 4 week — Product & short video intros (P1 P2 L1 C1)", "file": "ep04-product-intros.txt", "v": "1bb9037de4"},
+    {"id": "ep05-1-percent-rule", "title": "☁ Episode 5 — The 1% rule: surviving a losing streak", "file": "ep05-1-percent-rule.txt", "v": "0386f24da3"}
   ],
-  "updated": "2026-11-20T09:37:00Z"
+  "updated": "2026-11-20T11:45:00Z"
 }
