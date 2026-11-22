@@ -1,0 +1,20 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>🎙 Voice → draft</title><style>body{font-family:system-ui,sans-serif;margin:0;padding:20px;color:#1f2937;text-align:center}h3{margin:0 0 6px}p{color:#6b7280;font-size:14px;margin:0 0 16px}#b{width:120px;height:120px;border-radius:60px;border:0;font-size:44px;background:#7c3aed;color:#fff;cursor:pointer}#b.r{background:#dc2626;animation:p 1s infinite}@keyframes p{50%{transform:scale(1.07)}}#t{font-size:22px;margin:12px 0;font-variant-numeric:tabular-nums}#m{font-size:14px;min-height:20px;text-align:left;white-space:pre-wrap}.ok{color:#059669}.er{color:#dc2626}</style></head><body>
+<h3>🎙 Voice → draft</h3><p>ተጫን → ተናገር (ምን እንዲፃፍ እንደምትፈልግ) → እንደገና ተጫን።</p>
+<button id="b">🎤</button><div id="t">0:00</div><div id="m"></div>
+<script>
+var UP='https://n8n.tradeinsightnlm.com/webhook/ti-voice-up';
+var q=new URLSearchParams(location.search),acc=q.get('acc')||1,conv=q.get('conv'),rec,ch=[],st,tm,b=document.getElementById('b'),m=document.getElementById('m'),t=document.getElementById('t');
+if(!conv){m.className='er';m.textContent='Open a chat first (AI Tools → Voice → draft).';b.disabled=true}
+b.onclick=async function(){
+ if(rec&&rec.state==='recording'){rec.stop();return}
+ var s;
+ try{s=await navigator.mediaDevices.getUserMedia({audio:true})}catch(e){m.className='er';var nm=e&&e.name||'';m.textContent=nm==='NotAllowedError'?'⚠️ Microphone ተከልክሏል። ከላይ address bar ላይ 🔒 ን ተጫን → Microphone → Allow → refresh። Windows ከሆነ: Settings → Privacy → Microphone → Chrome On።':nm==='NotFoundError'?'⚠️ Microphone አልተገኘም። Headset/mic ሰክተህ እንደገና ሞክር።':nm==='NotReadableError'?'⚠️ Microphone ሌላ app (Zoom, OBS…) እየተጠቀመው ነው። ዝጋው ከዛ እንደገና ሞክር።':'⚠️ Microphone error: '+nm+' '+(e&&e.message||'');return}
+ ch=[];rec=new MediaRecorder(s);rec.ondataavailable=function(e){if(e.data.size)ch.push(e.data)};
+ rec.onstop=async function(){s.getTracks().forEach(function(x){x.stop()});clearInterval(tm);b.className='';b.disabled=true;b.textContent='⏳';m.className='';m.textContent='ወደ ፅሁፍ እየቀየርኩ ነው…';
+  var mt=rec.mimeType||'audio/webm';var bl=new Blob(ch,{type:mt});var ext=mt.indexOf('mp4')>-1?'m4a':(mt.indexOf('ogg')>-1?'ogg':'webm');var fd=new FormData();fd.append('acc',acc);fd.append('conv',conv);fd.append('file',bl,'voice.'+ext);
+  try{var r=await fetch(UP,{method:'POST',body:fd});var j=await r.json();
+   if(j.ok){m.className='ok';m.textContent='✅ "'+j.text+'"\n\nDraft ው በ30 ሰከንድ ውስጥ chat ው ውስጥ ይመጣል።';b.disabled=false;b.textContent='🎤';setTimeout(function(){if(window.opener)window.close()},8000)}
+   else{m.className='er';m.textContent='⚠️ '+(j.err||'Failed');b.disabled=false;b.textContent='🎤'}}catch(e){m.className='er';m.textContent='⚠️ Network error';b.disabled=false;b.textContent='🎤'}};
+ rec.start();st=Date.now();b.className='r';b.textContent='⏹';m.textContent='';tm=setInterval(function(){var x=Math.floor((Date.now()-st)/1000);t.textContent=Math.floor(x/60)+':'+String(x%60).padStart(2,'0');if(x>=120)rec.stop()},250);
+};
+</script></body></html>
