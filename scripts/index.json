@@ -4,9 +4,9 @@
   "scripts": [
     {
       "id": "gold-weekly-outlook",
-      "title": "📱 Gold Weekly Outlook — week of Nov 23 (1 min)",
+      "title": "📱 Gold Weekly Outlook — week of Nov 23 (1 min) · Samuel's final",
       "file": "gold-weekly-outlook.txt",
-      "v": "fa9e9dce64"
+      "v": "e99484c178"
     },
     {
       "id": "ep04-fomo",
@@ -27,5 +27,5 @@
       "v": "0386f24da3"
     }
   ],
-  "updated": "2026-11-20T22:39:23Z"
+  "updated": "2026-11-22T07:36:00Z"
 }
