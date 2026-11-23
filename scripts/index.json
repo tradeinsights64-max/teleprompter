@@ -1,12 +1,12 @@
 {
   "note": "Only THIS week's scripts are listed. Every Friday ... The teleprompter deletes scripts that leave this list.",
-  "open": "gold-weekly-outlook",
+  "open": "ep06-trading-psychology-after-a-loss",
   "scripts": [
     {
       "id": "gold-weekly-outlook",
       "title": "📱 Gold Weekly Outlook — week of Nov 23 (1 min) · Samuel's final",
       "file": "gold-weekly-outlook.txt",
-      "v": "e99484c178"
+      "v": "31f604844b"
     },
     {
       "id": "ep04-fomo",
@@ -25,7 +25,19 @@
       "title": "☁ Episode 5 — Execute the Plan. Not the Emotion.",
       "file": "ep05-execute-the-plan.txt",
       "v": "0386f24da3"
+    },
+    {
+      "id": "ep06-trading-psychology-after-a-loss",
+      "title": "☁ Episode 6 — Trading Psychology After a Loss (nervous system under pressure)",
+      "file": "ep06-trading-psychology-after-a-loss.txt",
+      "v": "b96272365e"
+    },
+    {
+      "id": "ep06-product-intros",
+      "title": "☁ Episode 6 week — Product intros & outros (P1 P2)",
+      "file": "ep06-product-intros.txt",
+      "v": "a491ccba5c"
     }
   ],
-  "updated": "2026-11-22T07:36:00Z"
+  "updated": "2026-11-23T05:48:19Z"
 }
