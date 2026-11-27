@@ -1,12 +1,12 @@
 {
   "note": "Only THIS week's scripts are listed. Every Friday ... The teleprompter deletes scripts that leave this list.",
-  "open": "ep06-trading-psychology-after-a-loss",
+  "open": "gold-weekly-outlook",
   "scripts": [
     {
       "id": "gold-weekly-outlook",
-      "title": "📱 Gold Weekly Outlook — week of Nov 23 (1 min) · Samuel's final",
+      "title": "📱 Gold Weekly Outlook — week of Nov 30 (1 min)",
       "file": "gold-weekly-outlook.txt",
-      "v": "31f604844b"
+      "v": "8774a57d9a"
     },
     {
       "id": "ep04-fomo",
@@ -39,5 +39,5 @@
       "v": "a491ccba5c"
     }
   ],
-  "updated": "2026-11-23T05:48:19Z"
+  "updated": "2026-11-27T22:39:58Z"
 }
